@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{a4160f9e-4143-4009-966c-acbca5da47e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{576bfc5e-8e4e-49b7-ae03-23ceae4f832e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{f3bfac1a-6470-49f7-a0f6-c858441eafb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Base">
+      <UniqueIdentifier>{17017b30-1668-42cb-992e-9731e5d0a6a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{8f251099-6fe6-433e-9606-28e5dcae67f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\ObjectManager">
+      <UniqueIdentifier>{deedcb7f-e9f6-44c4-9dfa-35418e69a785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene">
+      <UniqueIdentifier>{926e3fb9-ac17-489a-85c3-e1adb6be0d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene\Base">
+      <UniqueIdentifier>{00ca445b-e26d-45a2-a76a-8a67ac2ca57b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene\Menu">
+      <UniqueIdentifier>{f8b180da-0e43-4918-914e-5f9780179d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene\GameOver">
+      <UniqueIdentifier>{1e6f9fb9-284f-4fa8-8a4b-ab9fd3f564e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene\Level">
+      <UniqueIdentifier>{07a05efb-1c16-4736-b6ea-40299dff501e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Renderer">
+      <UniqueIdentifier>{f4b78388-5f00-4761-ac3e-2677220a16cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Wall">
+      <UniqueIdentifier>{06a0e983-5d15-4409-9559-65a7a0edb4f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player">
+      <UniqueIdentifier>{747197c2-c0b5-4995-98a3-7f17e231943f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Camera">
+      <UniqueIdentifier>{19767de2-3e5d-4b13-a4fa-58f830cf4a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Raytracer">
+      <UniqueIdentifier>{923c171c-6b12-4e14-a647-31536db88dea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\UI">
+      <UniqueIdentifier>{4e5ef4d8-f45a-453c-b557-e6ea8bda2e6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\UI\Minimap">
+      <UniqueIdentifier>{8370a25c-6744-431c-aa3e-66f726b4e95c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\UI\HUD">
+      <UniqueIdentifier>{321a195e-deae-4c50-9f7d-152f6ae92eab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene\Error">
+      <UniqueIdentifier>{af6e17a5-3265-4f65-b989-9adcbc9fb209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene\GameWin">
+      <UniqueIdentifier>{a9b99fb4-2086-4f65-9508-53d61f8e00b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Object\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneMenu.cpp">
+      <Filter>Object\Scene\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneGameOver.cpp">
+      <Filter>Object\Scene\GameOver</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneLevel.cpp">
+      <Filter>Object\Scene\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ObjectManager.cpp">
+      <Filter>Object\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracer.cpp">
+      <Filter>Object\Raytracer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Minimap.cpp">
+      <Filter>Object\UI\Minimap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HUD.cpp">
+      <Filter>Object\UI\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneError.cpp">
+      <Filter>Object\Scene\Error</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneGameWin.cpp">
+      <Filter>Object\Scene\GameWin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Enums.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer.hpp">
+      <Filter>Object\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object.hpp">
+      <Filter>Object\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector2.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.hpp">
+      <Filter>Object\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.hpp">
+      <Filter>Object\Scene\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneMenu.hpp">
+      <Filter>Object\Scene\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneGameOver.hpp">
+      <Filter>Object\Scene\GameOver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneLevel.hpp">
+      <Filter>Object\Scene\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ObjectManager.hpp">
+      <Filter>Object\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracer.hpp">
+      <Filter>Object\Raytracer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Structs.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wall.hpp">
+      <Filter>Object\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.hpp">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Minimap.hpp">
+      <Filter>Object\UI\Minimap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HUD.hpp">
+      <Filter>Object\UI\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneError.hpp">
+      <Filter>Object\Scene\Error</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneGameWin.hpp">
+      <Filter>Object\Scene\GameWin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
