@@ -33,7 +33,7 @@ void Renderer::Init()
 	m_rectWindow = { 0, 0, 1, 1 };
 	SetConsoleWindowInfo(m_pConsole, true, &m_rectWindow);
 
-	COORD coord = { (short)m_screenWidth, (short)m_screenHeight };
+	COORD coord{ (short)m_screenWidth, (short)m_screenHeight };
 	if (!SetConsoleScreenBufferSize(m_pConsole, coord))
 	{
 		Error(L"SetConsoleScreenBufferSize", 21);
@@ -51,8 +51,7 @@ void Renderer::Init()
 	cfi.nFont = 0;
 
 	// font width and height
-	cfi.dwFontSize.X = 8;
-	cfi.dwFontSize.Y = 8;
+	cfi.dwFontSize = { 8, 8 };
 
 	// font family and weight
 	cfi.FontFamily = FF_DONTCARE;
@@ -113,9 +112,9 @@ void Renderer::RenderAtPos(const WCHAR& _unicodeChar, const WORD& _attribute, co
 
 void Renderer::RenderAtPos(CHAR_INFO const* const _pSprite, const SVector2& _pos, int _width, int _height)
 {
-	for (int y = 0; y < _height; y++)
+	for (int y{ 0 }; y < _height; y++)
 	{
-		for (int x = 0; x < _width; x++)
+		for (int x{ 0 }; x < _width; x++)
 		{
 			// if char is 0 continue
 			if (!_pSprite[y * _width + x].Char.UnicodeChar)

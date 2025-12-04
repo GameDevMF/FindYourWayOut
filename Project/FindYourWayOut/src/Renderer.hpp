@@ -15,7 +15,7 @@
 class Renderer : public Object
 {
 public:
-	#pragma region singleton
+#pragma region singleton
 	/// <summary>
 	/// get renderer instance
 	/// </summary>
@@ -25,16 +25,16 @@ public:
 		static Renderer instance;
 		return instance;
 	}
-	#pragma endregion
+#pragma endregion
 
-	#pragma region destructor
+#pragma region destructor
 	/// <summary>
 	/// destructor
 	/// </summary>
 	~Renderer();
-	#pragma endregion
+#pragma endregion
 
-	#pragma region override method
+#pragma region override method
 	/// <summary>
 	/// initialize object
 	/// </summary>
@@ -50,23 +50,23 @@ public:
 	/// render every frame
 	/// </summary>
 	virtual void Render() override;
-	#pragma endregion
+#pragma endregion
 
-	#pragma region inline method
+#pragma region inline method
 	/// <summary>
 	/// get screen with
 	/// </summary>
 	/// <returns>screen with</returns>
-	inline const int& GetScreenWidth() { return m_screenWidth; }
+	constexpr int GetScreenWidth() const noexcept { return m_screenWidth; }
 
 	/// <summary>
 	/// get screen height
 	/// </summary>
 	/// <returns>screen height</returns>
-	inline const int& GetScreenHeight() { return m_screenHeight; }
-	#pragma endregion
+	constexpr int GetScreenHeight() const noexcept { return m_screenHeight; }
+#pragma endregion
 
-	#pragma region method
+#pragma region method
 	/// <summary>
 	/// render char at position on screen
 	/// </summary>
@@ -74,7 +74,7 @@ public:
 	/// <param name="_attribute">attribute like color</param>
 	/// <param name="_pos">position on screen</param>
 	void RenderAtPos(const WCHAR& _unicodeChar, const WORD& _attribute, const SVector2& _pos);
-	
+
 	/// <summary>
 	/// render sprite at position on screen
 	/// </summary>
@@ -82,30 +82,30 @@ public:
 	/// <param name="_pos">position on screen</param>
 	/// <param name="_width">width of sprite</param>
 	/// <param name="_height">height of sprite</param>
-	void RenderAtPos(CHAR_INFO const * const _pSprite, const SVector2& _pos, int _width, int _height);
-	#pragma endregion
+	void RenderAtPos(CHAR_INFO const* const _pSprite, const SVector2& _pos, int _width, int _height);
+#pragma endregion
 
 private:
-	#pragma region constructor
+#pragma region constructor
 	/// <summary>
 	/// constructor
 	/// </summary>
 	Renderer() {};
-	#pragma endregion
+#pragma endregion
 
-	#pragma region primitive variable
+#pragma region primitive variable
 	/// <summary>
 	/// screen width in chars
 	/// </summary>
-	int m_screenWidth = 0;
+	int m_screenWidth{ 0 };
 
 	/// <summary>
 	/// screen height in chars
 	/// </summary>
-	int m_screenHeight = 0;
-	#pragma endregion
+	int m_screenHeight{ 0 };
+#pragma endregion
 
-	#pragma region variable
+#pragma region variable
 	/// <summary>
 	/// title text
 	/// </summary>
@@ -114,47 +114,47 @@ private:
 	/// <summary>
 	/// app name
 	/// </summary>
-	std::wstring m_appName = L"FIND YOUR WAY OUT";
+	std::wstring m_appName{ L"FIND YOUR WAY OUT" };
 
 	/// <summary>
 	/// original console info to reset to at renderer close
 	/// </summary>
-	CONSOLE_SCREEN_BUFFER_INFO m_originalConsoleInfo = CONSOLE_SCREEN_BUFFER_INFO();
+	CONSOLE_SCREEN_BUFFER_INFO m_originalConsoleInfo{ CONSOLE_SCREEN_BUFFER_INFO() };
 
 	/// <summary>
 	/// window rect to render to
 	/// </summary>
-	SMALL_RECT m_rectWindow = SMALL_RECT();
-	#pragma endregion
+	SMALL_RECT m_rectWindow{ SMALL_RECT() };
+#pragma endregion
 
-	#pragma region pointer
+#pragma region pointer
 	/// <summary>
 	/// reference to original console
 	/// </summary>
-	HANDLE m_pOriginalConsole = nullptr;
+	HANDLE m_pOriginalConsole{ nullptr };
 
 	/// <summary>
 	/// console reference
 	/// </summary>
-	HANDLE m_pConsole = nullptr;
+	HANDLE m_pConsole{ nullptr };
 
 	/// <summary>
 	/// console input reference
 	/// </summary>
-	HANDLE m_pConsoleIn = nullptr;
+	HANDLE m_pConsoleIn{ nullptr };
 
 	/// <summary>
 	/// char info array to display on screen
 	/// </summary>
-	CHAR_INFO* m_pScreen = nullptr;
-	#pragma endregion
+	CHAR_INFO* m_pScreen{ nullptr };
+#pragma endregion
 
-	#pragma region method
+#pragma region method
 	/// <summary>
 	/// error to show
 	/// </summary>
 	/// <param name="_message">message to show</param>
 	/// <param name="_errorCode">error code</param>
 	void Error(const wchar_t* _message, int _errorCode);
-	#pragma endregion
+#pragma endregion
 };

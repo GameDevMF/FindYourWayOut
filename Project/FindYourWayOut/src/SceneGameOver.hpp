@@ -13,6 +13,7 @@
 /// </summary>
 class SceneGameOver : public Scene
 {
+public:
 	#pragma region destructor
 	/// <summary>
 	/// destructor
@@ -43,18 +44,18 @@ private:
 	/// <summary>
 	/// start text location on screen
 	/// </summary>
-	SVector2 m_startTextLocation = SVector2();
+	SVector2 m_startTextLocation{ 0.0f, 0.0f };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// welcome text reference
 	/// </summary>
-	CHAR_INFO* m_pGameOver = nullptr;
+	CHAR_INFO* m_pGameOver{ nullptr };
 
 	/// <summary>
 	/// start text reference
 	/// </summary>
-	CHAR_INFO* m_pMenu = nullptr;
+	CHAR_INFO* m_pMenu{ nullptr };
 	#pragma endregion
 };

@@ -13,28 +13,26 @@ SceneGameOver::~SceneGameOver()
 
 void SceneGameOver::Init()
 {
-	const char* gameOver = "Game Over";
-	const char* menu = "Press ESC to Menu!";
+	const char* gameOver{ "Game Over" };
+	const char* menu{ "Press ESC to Menu!" };
 
 	m_pGameOver = new CHAR_INFO[9];
 	m_pMenu = new CHAR_INFO[18];
 
-	m_location.X = Renderer::Get().GetScreenWidth() / 2 - 5;
-	m_location.Y = Renderer::Get().GetScreenHeight() / 2;
+	m_location = { Renderer::Get().GetScreenWidth() * 0.5f - 5.0f, Renderer::Get().GetScreenHeight() * 0.5f };
 
-	m_startTextLocation.X = m_location.X - 4.0f;
-	m_startTextLocation.Y = m_location.Y + 1.0f;
+	m_startTextLocation = { m_location.X - 4.0f, m_location.Y + 1.0f };
 
-	for (int i = 0; i < 9; i++)
+	for (int i{ 0 }; i < 9; i++)
 	{
 		m_pGameOver[i].Char.UnicodeChar = gameOver[i];
-		m_pGameOver[i].Attributes = ECHAR_COLOR::FG_RED;
+		m_pGameOver[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_RED);
 	}
 
-	for (int i = 0; i < 18; i++)
+	for (int i{ 0 }; i < 18; i++)
 	{
 		m_pMenu[i].Char.UnicodeChar = menu[i];
-		m_pMenu[i].Attributes = ECHAR_COLOR::FG_WHITE;
+		m_pMenu[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_WHITE);
 	}
 }
 

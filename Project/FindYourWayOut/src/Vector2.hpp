@@ -29,7 +29,7 @@ public:
 	/// get squared length of vector 2
 	/// </summary>
 	/// <returns>squared length of vector 2</returns>
-	inline float LengthSquared()
+	constexpr float LengthSquared() const noexcept
 	{
 		return X * X + Y * Y;
 	}
@@ -38,7 +38,7 @@ public:
 	/// get length of vector 2
 	/// </summary>
 	/// <returns>length of vector 2</returns>
-	inline float Length()
+	inline const float Length() const noexcept
 	{
 		return sqrt(LengthSquared());
 	}
@@ -59,7 +59,7 @@ public:
 	/// <summary>
 	/// get normalized vector 2
 	/// </summary>
-	inline SVector2 Normalized()
+	inline const SVector2 Normalized() const
 	{
 		// get length of vector 2
 		float length = Length();
@@ -73,7 +73,7 @@ public:
 	/// </summary>
 	/// <param name="_other">other vector</param>
 	/// <returns>dot rpoduct</returns>
-	inline float Dot(const SVector2& _other)
+	inline const float Dot(SVector2 _other) const
 	{
 		return X * _other.X + Y * _other.Y;
 	}
@@ -85,9 +85,9 @@ public:
 	/// </summary>
 	/// <param name="_other">other vector</param>
 	/// <returns>calculated vector</returns>
-	inline SVector2 operator+(const SVector2& _other)
+	inline const SVector2 operator+(SVector2 _other) const
 	{
-		return SVector2(X + _other.X, Y + _other.Y);
+		return { X + _other.X, Y + _other.Y };
 	}
 
 	/// <summary>
@@ -95,7 +95,7 @@ public:
 	/// </summary>
 	/// <param name="_other">other vector</param>
 	/// <returns>calculated vector</returns>
-	inline SVector2 operator-(const SVector2& _other)
+	inline const SVector2 operator-(SVector2 _other) const
 	{
 		return SVector2(X - _other.X, Y - _other.Y);
 	}
@@ -105,7 +105,7 @@ public:
 	/// </summary>
 	/// <param name="_value">value to multiply</param>
 	/// <returns>calculated vector</returns>
-	inline SVector2 operator*(const float& _value)
+	inline const SVector2 operator*(float _value) const
 	{
 		return SVector2(X * _value, Y * _value);
 	}
@@ -115,11 +115,11 @@ public:
 	/// <summary>
 	/// x value
 	/// </summary>
-	float X = 0;
+	float X{ 0.0f };
 
 	/// <summary>
 	/// y value
 	/// </summary>
-	float Y = 0;
+	float Y{ 0.0f };
 	#pragma endregion
 };

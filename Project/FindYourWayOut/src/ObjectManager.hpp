@@ -2,6 +2,7 @@
 
 #pragma region include system
 #include <list>
+#include <memory>
 #pragma endregion
 
 #pragma region include project
@@ -50,25 +51,25 @@ public:
 	/// get level config
 	/// </summary>
 	/// <returns>level config</returns>
-	inline const SLevelConfig const GetLevelConfig() { return m_levelConfig; }
+	inline SLevelConfig GetLevelConfig() const { return m_levelConfig; }
 
 	/// <summary>
 	/// get player
 	/// </summary>
 	/// <returns>player reference</returns>
-	inline Player& const GetPlayer() { return *m_pPlayer; }
+	inline Player& GetPlayer() const { return *m_pPlayer.get(); }
 
 	/// <summary>
 	/// get all objects
 	/// </summary>
 	/// <returns>all objects</returns>
-	inline const std::list<Object*> const GetStaticObjects() { return m_pStaticObjects; }
+	constexpr const std::list<std::shared_ptr<Object>>& GetStaticObjects() const noexcept { return m_staticObjects; }
 
 	/// <summary>
 	/// get all dynamic objects
 	/// </summary>
 	/// <returns>all objects</returns>
-	inline const std::list<Object*> const GetDynamicObjects() { return m_pDynamicObjects; }
+	constexpr const std::list<std::shared_ptr<Object>>& GetDynamicObjects() const noexcept { return m_dynamicObjects; }
 	#pragma endregion
 
 	#pragma region method
@@ -82,12 +83,6 @@ public:
 	/// </summary>
 	/// <param name="_keepPlayer">if player should be deleted or not</param>
 	void ClearLevel(bool _keepPlayer);
-
-	/// <summary>
-	/// remove single object
-	/// </summary>
-	/// <param name="_pObject"></param>
-	void RemoveObject(Object* _pObject);
 
 	/// <summary>
 	/// if given location hits a wall
@@ -109,7 +104,7 @@ private:
 	/// <summary>
 	/// if an error occurred at level config load from file
 	/// </summary>
-	bool m_isLevelConfigLoadError = false;
+	bool m_isLevelConfigLoadError{ false };
 	#pragma endregion
 
 	#pragma region variable
@@ -138,32 +133,27 @@ private:
 	/// <summary>
 	/// player reference
 	/// </summary>
-	Player* m_pPlayer = nullptr;
-
-	/// <summary>
-	/// list of all objects to remove at end of frame
-	/// </summary>
-	std::list<Object*> m_objectsToRemove;
+	std::shared_ptr<Player> m_pPlayer{ nullptr };
 
 	/// <summary>
 	/// chunks of the level with static objects
 	/// </summary>
-	std::list<Object*>* m_pStaticObjectChunks = nullptr;
+	std::list<std::shared_ptr<Object>>* m_pStaticObjectChunks{ nullptr };
 
 	/// <summary>
 	/// chunks of the level with dynamic objects
 	/// </summary>
-	std::list<Object*>* m_pDynamicObjectChunks = nullptr;
+	std::list<std::shared_ptr<Object>>* m_pDynamicObjectChunks{ nullptr };
 
 	/// <summary>
 	/// all object in current scene
 	/// </summary>
-	std::list<Object*> m_pStaticObjects;
+	std::list<std::shared_ptr<Object>> m_staticObjects;
 
 	/// <summary>
 	/// all objects that needs to be updated
 	/// </summary>
-	std::list<Object*> m_pDynamicObjects;
+	std::list<std::shared_ptr<Object>> m_dynamicObjects;
 	#pragma endregion
 
 	#pragma region method

@@ -9,16 +9,11 @@
 #include "Game.hpp"
 #pragma endregion
 
-Game::~Game()
-{
-	delete m_pCurrentScene;
-}
-
 void Game::Init()
 {
 	Renderer::Get().Init();
 
-	m_pCurrentScene = new SceneMenu();
+	m_pCurrentScene = std::make_unique<SceneMenu>();
 	m_pCurrentScene->Init();
 	
 	m_isRunning = true;
@@ -38,7 +33,7 @@ void Game::SwitchScene(ESCENE_TYPE _type, int _level)
 	}
 }
 
-void Game::ShowErrorScene(std::string _pText)
+void Game::ShowErrorScene(const std::string& const _pText)
 {
 	m_isSceneChanging = true;
 	m_currentSceneType = ESCENE_TYPE::SHOW_ERROR;
@@ -48,7 +43,7 @@ void Game::ShowErrorScene(std::string _pText)
 void Game::Update()
 {
 	// calculate seconds since last frame
-	m_deltaSeconds = static_cast<float>(NOW - m_timeLastUpdate) / 1000.0f;
+	m_deltaSeconds = static_cast<float>(NOW - m_timeLastUpdate) * 0.001f;
 	m_timeLastUpdate = NOW;
 
 	Input::UpdateBeginFrame();
@@ -69,29 +64,26 @@ void Game::Render()
 
 void Game::ChangeScene()
 {
-	delete m_pCurrentScene;
-	m_pCurrentScene = nullptr;
-
 	m_isSceneChanging = false;
 
 	switch (m_currentSceneType)
 	{
 	case ESCENE_TYPE::MENU:
-		m_pCurrentScene = new SceneMenu();
+		m_pCurrentScene = std::make_unique<SceneMenu>();
 		break;
 	case ESCENE_TYPE::LEVEL:
-		m_pCurrentScene = new SceneLevel();
+		m_pCurrentScene = std::make_unique<SceneLevel>();
 		break;
 	case ESCENE_TYPE::GAME_OVER:
-		m_pCurrentScene = new SceneGameOver();
+		m_pCurrentScene = std::make_unique<SceneGameOver>();
 		break;
 	case ESCENE_TYPE::GAME_WIN:
-		m_pCurrentScene = new SceneGameWin();
+		m_pCurrentScene = std::make_unique<SceneGameWin>();
 		break;
 	case ESCENE_TYPE::SHOW_ERROR:
 	{
-		m_pCurrentScene = new SceneError();
-		static_cast<SceneError*>(m_pCurrentScene)->SetErrorDetails(m_errorText.c_str());
+		m_pCurrentScene = std::make_unique<SceneError>();
+		static_cast<SceneError*>(m_pCurrentScene.get())->SetErrorDetails(m_errorText.c_str());
 		break;
 	}
 	default:

@@ -2,6 +2,7 @@
 
 #pragma region system include
 #include <windows.h>
+#include <memory>
 #pragma endregion
 
 #pragma region include project
@@ -55,7 +56,7 @@ public:
 	/// set player reference
 	/// </summary>
 	/// <param name="_pPlayer">player reference</param>
-	inline void SetPlayer(Player* _pPlayer) { m_pPlayer = _pPlayer; }
+	constexpr void SetPlayer(Player* _pPlayer) noexcept { m_pPlayer = _pPlayer; }
 	#pragma endregion
 
 private:
@@ -63,30 +64,30 @@ private:
 	/// <summary>
 	/// tile size
 	/// </summary>
-	int m_tileSize = 0;
+	int m_tileSize{ 0 };
 
 	/// <summary>
 	/// size of the mini map
 	/// </summary>
-	int m_minimapSize = 0;
+	int m_minimapSize{ 0 };
 	#pragma endregion
 
 	#pragma region variable
 	/// <summary>
 	/// check location for wall hit
 	/// </summary>
-	SVector2 m_checkLocation;
+	SVector2 m_checkLocation{ 0.0f, 0.0f };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// player reference
 	/// </summary>
-	Player* m_pPlayer = nullptr;
+	Player* m_pPlayer{ nullptr };
 
 	/// <summary>
 	/// mini map char info
 	/// </summary>
-	CHAR_INFO* m_pCharInfo = nullptr;
+	CHAR_INFO* m_pCharInfo{ nullptr };
 	#pragma endregion
 };
