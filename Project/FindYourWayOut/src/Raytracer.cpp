@@ -28,7 +28,7 @@ void Raytracer::Render()
 	m_traceSteps = 0;
 	m_maxWallHeight = 0;
 
-	for (int verticalScreenLine = 0; verticalScreenLine < m_screenWidth; verticalScreenLine++)
+	for (int verticalScreenLine{ 0 }; verticalScreenLine < m_screenWidth; verticalScreenLine++)
 	{
 		CalculateCurrentTraceLineForwardVector();
 
@@ -45,7 +45,7 @@ void Raytracer::Render()
 		SetHeightLineChars(verticalScreenLine);
 
 		// render current screen height line
-		Renderer::Get().RenderAtPos(m_pCurrentLineCharInfo, SVector2(verticalScreenLine, 0.0f), 1, m_screenHeight);
+		Renderer::Get().RenderAtPos(m_pCurrentLineCharInfo, { static_cast<float>(verticalScreenLine), 0.0f }, 1, m_screenHeight);
 
 		// increase current trace line angle
 		m_currentTraceLineAngleDegree -= m_anglePerLineDegree;
@@ -61,30 +61,33 @@ void Raytracer::Prepare()
 	m_screenWidth = Renderer::Get().GetScreenWidth();
 	m_screenHeight = Renderer::Get().GetScreenHeight();
 
+	const SVector2 fov{ ObjectManager::Get().GetPlayer().GetCamera().GetFov() };
+	const int cameraMaxViewDistance{ ObjectManager::Get().GetPlayer().GetCamera().GetMaxViewDistance() };
+
 	// half horizontal fov prevents for calculation every frame
-	m_halfHorizontalFov = ObjectManager::Get().GetPlayer().GetCamera().GetFov().X * 0.5f;
+	m_halfHorizontalFov = fov.X * 0.5f;
 
 	// angle for a single line depending on fov
-	m_anglePerLineDegree = ObjectManager::Get().GetPlayer().GetCamera().GetFov().X / m_screenWidth;
+	m_anglePerLineDegree = fov.X / m_screenWidth;
 
 	// calculate value to convert degree to radiant
 	m_radiantToDegreeCalculateValue = M_PI / 180.0f;
 
 	// calculate value to calculate distance from camera to height
-	m_distanceToCameraToHeightCalculateValue = tan((ObjectManager::Get().GetPlayer().GetCamera().GetFov().Y * 0.5f) * m_radiantToDegreeCalculateValue) * 2.0f;
+	m_distanceToCameraToHeightCalculateValue = tan((fov.Y * 0.5f) * m_radiantToDegreeCalculateValue) * 2.0f;
 
 	m_tileSize = ObjectManager::Get().GetLevelConfig().TileSizeCm;
-	m_maxViewDistance = ObjectManager::Get().GetPlayer().GetCamera().GetMaxViewDistance();
+	m_maxViewDistance = cameraMaxViewDistance;
 
 	// calculate max steps for one trace
-	m_traceStepsMax = ObjectManager::Get().GetPlayer().GetCamera().GetMaxViewDistance() / m_tileSize * 2.0f;
+	m_traceStepsMax = cameraMaxViewDistance / m_tileSize * 2.0f;
 
 	if (!m_pCurrentLineCharInfo)
 	{
 		m_pCurrentLineCharInfo = new CHAR_INFO[m_screenHeight];
 
-		for (int i = 0; i < m_screenHeight; i++)
-			m_pCurrentLineCharInfo[i].Char.UnicodeChar = ECHAR_TYPE::SOLID;
+		for (int i{ 0 }; i < m_screenHeight; i++)
+			m_pCurrentLineCharInfo[i].Char.UnicodeChar = static_cast<wchar_t>(ECHAR_TYPE::SOLID);
 	}
 
 	if (!m_pLineDistance)
@@ -100,8 +103,7 @@ void Raytracer::CalculateCurrentTraceLineForwardVector()
 {
 	m_currentTraceLineAngleRadiant = m_radiantToDegreeCalculateValue * m_currentTraceLineAngleDegree;
 
-	m_currentTraceLineForward.X = std::sin(m_currentTraceLineAngleRadiant);
-	m_currentTraceLineForward.Y = std::cos(m_currentTraceLineAngleRadiant);
+	m_currentTraceLineForward = { std::sin(m_currentTraceLineAngleRadiant), std::cos(m_currentTraceLineAngleRadiant) };
 }
 
 void Raytracer::CalculateHorizontalCheckForwardVector()
@@ -223,15 +225,9 @@ void Raytracer::CalculateVerticalCheckForwardVector()
 void Raytracer::SetFirstCheckLocations()
 {
 	if (m_horizontalCheckForward.Y == 0.0f && m_horizontalCheckForward.X != 0.0f)
-	{
-		m_verticalCheckForward.X = 0.0f;
-		m_verticalCheckForward.Y = 0.0f;
-	}
+		m_verticalCheckForward = { 0.0f, 0.0f };
 	else if (m_verticalCheckForward.X == 0.0f && m_verticalCheckForward.Y != 0.0f)
-	{
-		m_horizontalCheckForward.X = 0.0f;
-		m_horizontalCheckForward.Y = 0.0f;
-	}
+		m_horizontalCheckForward = { 0.0f, 0.0f };
 
 	m_horizontalCheckLocation = m_cameraLocation + m_horizontalCheckForward;
 	m_verticalCheckLocation = m_cameraLocation + m_verticalCheckForward;
@@ -256,7 +252,7 @@ void Raytracer::CalculateCheckSteps()
 		m_verticalCheckForward.Y = -m_tileSize;
 }
 
-void Raytracer::TraceAlongLine(const int& _currentLine)
+void Raytracer::TraceAlongLine(int _currentLine)
 {
 	m_distanceToCamera = 0.0f;
 	m_traceSteps = 0;
@@ -318,7 +314,7 @@ bool Raytracer::IsCheckHitsWall()
 	return false;
 }
 
-void Raytracer::SetHeightLineChars(const int& _currentLine)
+void Raytracer::SetHeightLineChars(int _currentLine)
 {
 	if (m_distanceToCamera && m_distanceToCamera < m_maxViewDistance)
 	{
@@ -330,10 +326,10 @@ void Raytracer::SetHeightLineChars(const int& _currentLine)
 		{
 			m_pWallStartHeight[_currentLine] = m_screenHeight;
 
-			for (int i = 0; i < m_screenHeight; i++)
+			for (int i{ 0 }; i < m_screenHeight; i++)
 			{
-				m_pCurrentLineCharInfo[i].Char.UnicodeChar = ECHAR_TYPE::SOLID;
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::CYAN;
+				m_pCurrentLineCharInfo[i].Char.UnicodeChar = static_cast<wchar_t>(ECHAR_TYPE::SOLID);
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::CYAN);
 			}
 		}
 		else
@@ -353,33 +349,33 @@ void Raytracer::SetHeightLineChars(const int& _currentLine)
 			if (m_renderStartPos > m_maxWallHeight)
 				m_maxWallHeight = m_renderStartPos;
 
-			for (int i = 0; i < m_screenHeight; i++)
+			for (int i{ 0 }; i < m_screenHeight; i++)
 			{
 				if (i >= m_renderStartPos && i <= m_renderHeight)
 				{
 					if (m_distanceToCamera <= m_tileSize * 2.0f)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::CYAN;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::CYAN);
 					else if (m_distanceToCamera <= m_tileSize * 4.0f)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::BLUE;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::BLUE);
 					else
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::DARK_BLUE;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::DARK_BLUE);
 				}
 
 				// if current char is below or above calculated wall
 				else
 				{
 					if (i > m_screenHeight * 0.8f - 2)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::GREEN;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::GREEN);
 					else if (i > m_screenHeight * 0.6f - 2)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::DARK_GREEN;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::DARK_GREEN);
 					else if (i > m_screenHeight * 0.5f - 2)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::BG_DARK_GREEN;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::BG_DARK_GREEN);
 					else if (i > m_screenHeight * 0.4f)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::BG_GREY;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::BG_GREY);
 					else if (i > m_screenHeight * 0.2f)
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::DARK_GREY;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::DARK_GREY);
 					else
-						m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::GREY;
+						m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::GREY);
 				}
 			}
 		}
@@ -389,36 +385,39 @@ void Raytracer::SetHeightLineChars(const int& _currentLine)
 	{
 		m_pWallStartHeight[_currentLine] = -1;
 
-		for (int i = 0; i < m_screenHeight; i++)
+		for (int i{ 0 }; i < m_screenHeight; i++)
 		{
 			if (i > m_screenHeight * 0.8f - 2)
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::GREEN;
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::GREEN);
 			else if (i > m_screenHeight * 0.6f - 2)
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::DARK_GREEN;
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::DARK_GREEN);
 			else if (i > m_screenHeight * 0.5f - 2)
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::BG_DARK_GREEN;
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::BG_DARK_GREEN);
 			else if (i > m_screenHeight * 0.4f)
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::BG_GREY;
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::BG_GREY);
 			else if (i > m_screenHeight * 0.2f)
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::DARK_GREY;
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::DARK_GREY);
 			else
-				m_pCurrentLineCharInfo[i].Attributes = ECHAR_COLOR::GREY;
+				m_pCurrentLineCharInfo[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::GREY);
 		}
 	}
 }
 
 void Raytracer::TraceToExitLocation()
 {
+	const int cameraMaxViewDistanceSquared{ ObjectManager::Get().GetLevelConfig().CameraMaxViewDistance };
+	const float cameraAngle{ ObjectManager::Get().GetPlayer().GetCamera().GetAngle() };
+	const float screenHeightThreeQuarters{ m_screenHeight * 0.75f };
+	const float screenHeightHalf{ m_screenHeight * 0.5f };
+
 	// if distance from camera to exit location is higher than view distance return
-	if ((m_cameraLocation - m_exitLocation).LengthSquared() >
-		(ObjectManager::Get().GetLevelConfig().CameraMaxViewDistance * ObjectManager::Get().GetLevelConfig().CameraMaxViewDistance))
+	if ((m_cameraLocation - m_exitLocation).LengthSquared() > (cameraMaxViewDistanceSquared * cameraMaxViewDistanceSquared))
 		return;
 
 	// calculate camera angle to check
-	m_currentTraceLineAngleRadiant = m_radiantToDegreeCalculateValue * ObjectManager::Get().GetPlayer().GetCamera().GetAngle();
+	m_currentTraceLineAngleRadiant = m_radiantToDegreeCalculateValue * cameraAngle;
 
-	m_currentTraceLineForward.X = std::sin(m_currentTraceLineAngleRadiant);
-	m_currentTraceLineForward.Y = std::cos(m_currentTraceLineAngleRadiant);
+	m_currentTraceLineForward = { std::sin(m_currentTraceLineAngleRadiant), std::cos(m_currentTraceLineAngleRadiant) };
 	m_currentTraceLineForward.Normalize();
 
 	m_angleBetweenCameraAndExitLocation = m_currentTraceLineForward.Dot((m_exitLocation - m_cameraLocation).Normalized());
@@ -428,25 +427,23 @@ void Raytracer::TraceToExitLocation()
 		return;
 
 	// start trace angle at end of field of view horizontal
-	m_currentTraceLineAngleDegree = ObjectManager::Get().GetPlayer().GetCamera().GetAngle() + m_halfHorizontalFov;
+	m_currentTraceLineAngleDegree = cameraAngle + m_halfHorizontalFov;
 
 	m_currentTraceLineAngleRadiant = m_radiantToDegreeCalculateValue * m_currentTraceLineAngleDegree;
 
-	m_currentTraceLineForward.X = std::sin(m_currentTraceLineAngleRadiant);
-	m_currentTraceLineForward.Y = std::cos(m_currentTraceLineAngleRadiant);
+	m_currentTraceLineForward = { std::sin(m_currentTraceLineAngleRadiant), std::cos(m_currentTraceLineAngleRadiant) };
 	m_currentTraceLineForward.Normalize();
 
 	m_previousAngleBetweenCameraAndExitLocation = m_currentTraceLineForward.Dot((m_exitLocation - m_cameraLocation).Normalized());
 
 	// check every vertical screen line with one offset because it has to check whether the last dot product was higher
-	for (int verticalScreenLine = 1; verticalScreenLine < m_screenWidth + 1; verticalScreenLine++)
+	for (int verticalScreenLine{ 1 }; verticalScreenLine < m_screenWidth + 1; verticalScreenLine++)
 	{
 		m_currentTraceLineAngleDegree -= m_anglePerLineDegree;
 
 		m_currentTraceLineAngleRadiant = m_radiantToDegreeCalculateValue * m_currentTraceLineAngleDegree;
 
-		m_currentTraceLineForward.X = std::sin(m_currentTraceLineAngleRadiant);
-		m_currentTraceLineForward.Y = std::cos(m_currentTraceLineAngleRadiant);
+		m_currentTraceLineForward = { std::sin(m_currentTraceLineAngleRadiant), std::cos(m_currentTraceLineAngleRadiant) };
 		m_currentTraceLineForward.Normalize();
 
 		m_distanceToCamera = (m_exitLocation - m_cameraLocation).Length();
@@ -457,8 +454,8 @@ void Raytracer::TraceToExitLocation()
 		if (m_angleBetweenCameraAndExitLocation < m_previousAngleBetweenCameraAndExitLocation || verticalScreenLine == m_screenWidth)
 		{
 			// calculate height of exit depending on distance to camera
-			m_heightFovVerticalAtDistanceToCamera = m_screenHeight * 0.75f - (m_screenHeight * 0.75f *
-				(m_distanceToCamera / ObjectManager::Get().GetLevelConfig().CameraMaxViewDistance));
+			m_heightFovVerticalAtDistanceToCamera = screenHeightThreeQuarters - (screenHeightThreeQuarters *
+				(m_distanceToCamera / cameraMaxViewDistanceSquared));
 			m_heightFovVerticalAtDistanceToCamera *= 0.5f;
 
 			// height is only straight number
@@ -471,18 +468,20 @@ void Raytracer::TraceToExitLocation()
 
 			m_distanceToWallFromFovHeight = m_heightFovVerticalAtDistanceToCamera;
 
+			const float columnFillHeight{ m_distanceToWallFromFovHeight * 0.5f - 1.0f };
+
 			// fill height line from center to top and bottom depending on distance to camera
-			for (int column = 0; column < m_distanceToWallFromFovHeight * 0.5f - 1.0f; column++)
+			for (int column{ 0 }; column < columnFillHeight; column++)
 			{
 				if (column && verticalScreenLine - 1.0f - column >= 0.0f)
 					if (m_pLineDistance[verticalScreenLine - 1 - column] == 0.0f || m_pLineDistance[verticalScreenLine - 1 - column] > m_distanceToCamera + column)
-						for (int i = (m_screenHeight * 0.5f) - m_heightFovVerticalAtDistanceToCamera; i < m_screenHeight * 0.5f + m_heightFovVerticalAtDistanceToCamera; i++)
-							Renderer::Get().RenderAtPos(ECHAR_TYPE::SOLID, ECHAR_COLOR::YELLOW, { verticalScreenLine - 1.0f - column, static_cast<float>(i) });
+						for (int i{ static_cast<int>(screenHeightHalf - m_heightFovVerticalAtDistanceToCamera) }; i < screenHeightHalf + m_heightFovVerticalAtDistanceToCamera; i++)
+							Renderer::Get().RenderAtPos(static_cast<wchar_t>(ECHAR_TYPE::SOLID), static_cast<unsigned short>(ECHAR_COLOR::YELLOW), { verticalScreenLine - 1.0f - column, static_cast<float>(i) });
 				
 				if(verticalScreenLine - 1.0f + column < m_screenWidth)
 					if (m_pLineDistance[verticalScreenLine - 1 + column] == 0.0f || m_pLineDistance[verticalScreenLine - 1 + column] > m_distanceToCamera + column)
-						for (int i = (m_screenHeight * 0.5f) - m_heightFovVerticalAtDistanceToCamera; i < m_screenHeight * 0.5f + m_heightFovVerticalAtDistanceToCamera; i++)
-							Renderer::Get().RenderAtPos(ECHAR_TYPE::SOLID, ECHAR_COLOR::YELLOW, { verticalScreenLine - 1.0f + column, static_cast<float>(i) });
+						for (int i{ static_cast<int>(screenHeightHalf - m_heightFovVerticalAtDistanceToCamera) }; i < screenHeightHalf + m_heightFovVerticalAtDistanceToCamera; i++)
+							Renderer::Get().RenderAtPos(static_cast<wchar_t>(ECHAR_TYPE::SOLID), static_cast<unsigned short>(ECHAR_COLOR::YELLOW), {verticalScreenLine - 1.0f + column, static_cast<float>(i)});
 
 				m_heightFovVerticalAtDistanceToCamera -= 2.0f;
 			}			
@@ -497,22 +496,24 @@ void Raytracer::TraceToExitLocation()
 
 void Raytracer::FillGroundToClosestWallPixel()
 {
-	if (m_maxWallHeight == m_screenHeight || m_maxWallHeight <= m_screenHeight * 0.4f)
+	const float screenHeightFourTenths{ m_screenHeight * 0.4f };
+
+	if (m_maxWallHeight == m_screenHeight || m_maxWallHeight <= screenHeightFourTenths)
 		return;
 
-	for (int verticalScreenLine = 0; verticalScreenLine < m_screenWidth; verticalScreenLine++)
+	for (int verticalScreenLine{ 0 }; verticalScreenLine < m_screenWidth; verticalScreenLine++)
 	{
 		// only affect lines which are not full wall and wall starts in dark green area
 		if(m_pWallStartHeight[verticalScreenLine] == m_screenHeight ||
-			(m_pWallStartHeight[verticalScreenLine] <= m_screenHeight * 0.4f && (m_pWallStartHeight[verticalScreenLine] != -1)))
+			(m_pWallStartHeight[verticalScreenLine] <= screenHeightFourTenths && (m_pWallStartHeight[verticalScreenLine] != -1)))
 			continue;
 
-		for (int i = m_screenHeight * 0.4f + 1; i < m_maxWallHeight; i++)
+		for (int i{ static_cast<int>(screenHeightFourTenths + 1) }; i < m_maxWallHeight; i++)
 		{
 			if (m_pWallStartHeight[verticalScreenLine] > i || m_pWallStartHeight[verticalScreenLine] == -1)
 			{
-				Renderer::Get().RenderAtPos(ECHAR_TYPE::SOLID, ECHAR_COLOR::DARK_GREY, SVector2(verticalScreenLine, i));
-				Renderer::Get().RenderAtPos(ECHAR_TYPE::SOLID, ECHAR_COLOR::DARK_GREEN, SVector2(verticalScreenLine, m_screenHeight - i - 1));
+				Renderer::Get().RenderAtPos(static_cast<wchar_t>(ECHAR_TYPE::SOLID), static_cast<unsigned short>(ECHAR_COLOR::DARK_GREY), SVector2(verticalScreenLine, i));
+				Renderer::Get().RenderAtPos(static_cast<wchar_t>(ECHAR_TYPE::SOLID), static_cast<unsigned short>(ECHAR_COLOR::DARK_GREEN), SVector2(verticalScreenLine, m_screenHeight - i - 1));
 			}
 		}
 	}
