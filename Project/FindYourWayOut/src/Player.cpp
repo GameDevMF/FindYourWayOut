@@ -7,25 +7,15 @@
 #include "Input.hpp"
 #include "Game.hpp"
 #include "ObjectManager.hpp"
-#include "Camera.hpp"
-#include "HUD.hpp"
-#include "Minimap.hpp"
 #include "Player.hpp"
 #pragma endregion
-
-Player::~Player()
-{
-	delete m_pCamera;
-	delete m_pHUD;
-	delete m_pMinimap;
-}
 
 void Player::Init()
 {
 	m_radiantToDegreeCalculateValue = M_PI / 180.0f;
 
 	if (!m_pCamera)
-		m_pCamera = new Camera(m_location);
+		m_pCamera = std::make_unique<Camera>(m_location);
 	else
 		m_pCamera->SetLocation(m_location);
 	m_pCamera->SetFov(ObjectManager::Get().GetLevelConfig().CameraFOV);
@@ -33,14 +23,14 @@ void Player::Init()
 	m_pCamera->SetAngle(0.0f);
 
 	if (!m_pMinimap)
-		m_pMinimap = new Minimap();
+		m_pMinimap = std::make_unique<Minimap>();
 	m_pMinimap->SetPlayer(this);
 	m_pMinimap->Init();
 
 	m_timeLeft = ObjectManager::Get().GetLevelConfig().Time;
 
 	if (!m_pHUD)
-		m_pHUD = new HUD();
+		m_pHUD = std::make_unique<HUD>();
 	m_pHUD->Init();
 	m_pHUD->UpdateTimeLeft(m_timeLeft);
 }
@@ -49,7 +39,7 @@ void Player::Update(float _deltaSeconds)
 {
 	if (Input::IsKeyPressedThisFrame(VK_ESCAPE))
 	{
-		Game::Get().SwitchScene(MENU);
+		Game::Get().SwitchScene(ESCENE_TYPE::MENU);
 		return;
 	}
 
@@ -73,19 +63,21 @@ void Player::Update(float _deltaSeconds)
 	// calculate camera angle radiant
 	m_cameraAngleRadiant = m_pCamera->GetAngle() * m_radiantToDegreeCalculateValue;
 
-	m_forward.X = sin(m_cameraAngleRadiant);
-	m_forward.Y = cos(m_cameraAngleRadiant);
+	m_forward = { static_cast<float>(sin(m_cameraAngleRadiant)), static_cast<float>(cos(m_cameraAngleRadiant)) };
+
+	const SVector2 locationForwardNext{ m_location + (m_forward * (m_movementSpeed * _deltaSeconds)) };
+	const SVector2 locationBackwardNext{ m_location - (m_forward * (m_movementSpeed * _deltaSeconds)) };
 
 	if (Input::IsKeyPressed(VK_UP))
 	{
-		if(!ObjectManager::Get().HitWall(m_location + (m_forward * (m_movementSpeed * _deltaSeconds))))
-			m_location = m_location + (m_forward * (m_movementSpeed * _deltaSeconds));
+		if(!ObjectManager::Get().HitWall(locationForwardNext))
+			m_location = locationForwardNext;
 	}
 
 	if (Input::IsKeyPressed(VK_DOWN))
 	{
-		if (!ObjectManager::Get().HitWall(m_location - (m_forward * (m_movementSpeed * _deltaSeconds))))
-			m_location = m_location - (m_forward * (m_movementSpeed * _deltaSeconds));
+		if (!ObjectManager::Get().HitWall(locationBackwardNext))
+			m_location = locationBackwardNext;
 	}
 
 	m_pCamera->SetLocation(m_location);

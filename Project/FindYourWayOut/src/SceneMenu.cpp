@@ -13,32 +13,30 @@ SceneMenu::~SceneMenu()
 
 void SceneMenu::Init()
 {
-	const char* welcome = "Welcome to HELLAGE!";
-	const char* start = "Press ENTER to start!";
+	const char* welcome{ "Welcome to HELLAGE!" };
+	const char* start{ "Press ENTER to start!" };
 
 	m_pWelcome = new CHAR_INFO[19];
 	m_pStart = new CHAR_INFO[21];
 
-	m_location.X = Renderer::Get().GetScreenWidth() / 2 - 10;
-	m_location.Y = Renderer::Get().GetScreenHeight() / 2;
+	m_location = { Renderer::Get().GetScreenWidth() * 0.5f - 10.0f, Renderer::Get().GetScreenHeight() * 0.5f };
 
-	m_startTextPosition.X = m_location.X - 1.0f;
-	m_startTextPosition.Y = m_location.Y + 1.0f;
+	m_startTextPosition = { m_location.X - 1.0f, m_location.Y + 1.0f };
 
-	for (int i = 0; i < 19; i++)
+	for (int i{ 0 }; i < 19; i++)
 	{
 		m_pWelcome[i].Char.UnicodeChar = welcome[i];
 
 		if (i < 11 || i > 17)
-			m_pWelcome[i].Attributes = ECHAR_COLOR::FG_WHITE;
+			m_pWelcome[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_WHITE);
 		else
-			m_pWelcome[i].Attributes = ECHAR_COLOR::FG_RED;
+			m_pWelcome[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_RED);
 	}
 
-	for (int i = 0; i < 21; i++)
+	for (int i{ 0 }; i < 21; i++)
 	{
 		m_pStart[i].Char.UnicodeChar = start[i];
-		m_pStart[i].Attributes = ECHAR_COLOR::FG_GREY;
+		m_pStart[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_GREY);
 	}
 }
 

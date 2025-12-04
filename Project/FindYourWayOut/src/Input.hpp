@@ -16,7 +16,7 @@ public:
 	/// </summary>
 	/// <param name="_key">key to check</param>
 	/// <returns>if key is pressed</returns>
-	inline static const bool& IsKeyPressed(const short& _key)
+	constexpr static bool IsKeyPressed(short _key) noexcept
 	{
 		return m_keyStateThisFrame[_key] & 0x8000;
 	}
@@ -26,7 +26,7 @@ public:
 	/// </summary>
 	/// <param name="_key">key to check</param>
 	/// <returns>key is pressed this frame</returns>
-	inline static const bool& IsKeyPressedThisFrame(const short& _key)
+	constexpr static bool IsKeyPressedThisFrame(short _key) noexcept
 	{
 		return m_keyStateThisFrame[_key] & 0x8000 && !(m_keyStateLastFrame[_key] & 0x8000);
 	}
@@ -36,7 +36,7 @@ public:
 	/// </summary>
 	/// <param name="_key">key to check</param>
 	/// <returns>if key is released</returns>
-	inline static const bool& IsKeyReleased(const short& _key)
+	constexpr static bool IsKeyReleased(short _key) noexcept
 	{
 		return !(m_keyStateThisFrame[_key] & 0x8000);
 	}
@@ -46,7 +46,7 @@ public:
 	/// </summary>
 	/// <param name="_key">key to check</param>
 	/// <returns>if key is released this frame</returns>
-	inline static const bool& IsKeyReleasedThisFrame(const short& _key)
+	constexpr static bool IsKeyReleasedThisFrame(short _key) noexcept
 	{
 		return !(m_keyStateThisFrame[_key] & 0x8000) && m_keyStateLastFrame[_key] & 0x8000;
 	}
@@ -56,12 +56,12 @@ public:
 	/// <summary>
 	/// update input at begin frame
 	/// </summary>
-	static void UpdateBeginFrame()
+	constexpr static void UpdateBeginFrame() noexcept
 	{
-		for (int i = 0; i < 256; i++)
+		for (int i{ 0 }; i < 256; i++)
 			m_keyStateLastFrame[i] = m_keyStateThisFrame[i];
 
-		for (int i = 0; i < 256; i++)
+		for (int i{ 0 }; i < 256; i++)
 			m_keyStateThisFrame[i] = GetAsyncKeyState(i);
 	}
 	#pragma endregion

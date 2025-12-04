@@ -15,7 +15,10 @@ public:
 	/// constructor
 	/// </summary>
 	/// <param name="_location">world location to set</param>
-	Wall(SVector2 _location) : Object(_location) {}
+	Wall(SVector2 _location) : Object(_location)
+	{
+		m_classType = ECLASS_TYPE::WALL;
+	}
 	#pragma endregion
 
 	#pragma region override method

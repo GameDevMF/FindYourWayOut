@@ -2,19 +2,17 @@
 
 #pragma region include project
 #include "Enums.hpp"
+#include "Scene.hpp"
 #pragma endregion
 
 #pragma region include system
+#include <memory>
 #include <chrono>
 #include <string>
 #pragma endregion
 
 #pragma region macro
 #define NOW std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()).time_since_epoch().count()
-#pragma endregion
-
-#pragma region forward declaration
-class Scene;
 #pragma endregion
 
 /// <summary>
@@ -35,36 +33,29 @@ public:
 	}
 	#pragma endregion
 
-	#pragma region destructor
-	/// <summary>
-	/// destructor
-	/// </summary>
-	~Game();
-	#pragma endregion
-
 	#pragma region inline method
 	/// <summary>
 	/// if game is running
 	/// </summary>
 	/// <returns></returns>
-	inline const bool& IsRunning() const { return m_isRunning; }
+	constexpr bool IsRunning() const noexcept { return m_isRunning; }
 
 	/// <summary>
 	/// get current level
 	/// </summary>
 	/// <returns>current level</returns>
-	inline const int& GetLevel() const { return m_level; }
+	constexpr int GetLevel() const noexcept { return m_level; }
 
 	/// <summary>
 	/// stop game
 	/// </summary>
-	inline void StopGame() { m_isRunning = false; }
+	constexpr void StopGame() noexcept { m_isRunning = false; }
 
 	/// <summary>
 	/// get seconds since last frame
 	/// </summary>
 	/// <returns>seconds since last frame</returns>
-	inline const float& GetDeltaSeconds() const { return m_deltaSeconds; }
+	constexpr float GetDeltaSeconds() const noexcept { return m_deltaSeconds; }
 	#pragma endregion
 
 	#pragma region method
@@ -84,7 +75,7 @@ public:
 	/// switch to error scene
 	/// </summary>
 	/// <param name="_pText">error text to display</param>
-	void ShowErrorScene(std::string _pText);
+	void ShowErrorScene(const std::string& const _pText);
 
 	/// <summary>
 	/// update game every frame
@@ -109,46 +100,46 @@ private:
 	/// <summary>
 	/// if game is running
 	/// </summary>
-	bool m_isRunning = false;
+	bool m_isRunning{ false };
 
 	/// <summary>
 	/// if scene needs to change
 	/// </summary>
-	bool m_isSceneChanging = false;
+	bool m_isSceneChanging{ false };
 
 	/// <summary>
 	/// current level
 	/// </summary>
-	int m_level = 0;
+	int m_level{ 0 };
 
 	/// <summary>
 	/// seconds since last frame
 	/// </summary>
-	float m_deltaSeconds = 0.0f;
+	float m_deltaSeconds{ 0.0f };
 
 	/// <summary>
 	/// time of last update
 	/// </summary>
-	long long m_timeLastUpdate = NOW;
+	long long m_timeLastUpdate{ NOW };
 	#pragma endregion
 
 	#pragma region variable
 	/// <summary>
 	/// error text
 	/// </summary>
-	std::string m_errorText = "";
+	std::string m_errorText{ "" };
 
 	/// <summary>
 	/// current scene type
 	/// </summary>
-	ESCENE_TYPE m_currentSceneType = ESCENE_TYPE::MENU;
+	ESCENE_TYPE m_currentSceneType{ ESCENE_TYPE::MENU };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// current active scene
 	/// </summary>
-	Scene* m_pCurrentScene = nullptr;
+	std::unique_ptr<Scene> m_pCurrentScene{ nullptr };
 	#pragma endregion
 
 	#pragma region method

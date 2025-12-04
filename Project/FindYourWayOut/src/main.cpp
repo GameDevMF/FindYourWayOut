@@ -18,7 +18,7 @@ VS: Project Properties -> General -> Character Set -> Use Unicode.
 int main(int argc, char* argv[])
 {
 	Game::Get().Init();
-	
+
 	while (Game::Get().IsRunning())
 	{
 		Game::Get().Update();

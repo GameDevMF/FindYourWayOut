@@ -13,28 +13,26 @@ SceneGameWin::~SceneGameWin()
 
 void SceneGameWin::Init()
 {
-	const char* gameWin = "You Won!";
-	const char* menu = "Press ESC to Menu!";
+	const char* gameWin{ "You Won!" };
+	const char* menu{ "Press ESC to Menu!" };
 
 	m_pGameWin = new CHAR_INFO[9];
 	m_pMenu = new CHAR_INFO[18];
 
-	m_location.X = Renderer::Get().GetScreenWidth() / 2 - 4;
-	m_location.Y = Renderer::Get().GetScreenHeight() / 2;
+	m_location = { Renderer::Get().GetScreenWidth() * 0.5f - 4.0f, Renderer::Get().GetScreenHeight() * 0.5f };
 
-	m_startTextLocation.X = m_location.X - 5.0f;
-	m_startTextLocation.Y = m_location.Y + 1.0f;
+	m_startTextLocation = { m_location.X - 5.0f, m_location.Y + 1.0f };
 
-	for (int i = 0; i < 8; i++)
+	for (int i{ 0 }; i < 8; i++)
 	{
 		m_pGameWin[i].Char.UnicodeChar = gameWin[i];
-		m_pGameWin[i].Attributes = ECHAR_COLOR::FG_GREEN;
+		m_pGameWin[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_GREEN);
 	}
 
-	for (int i = 0; i < 18; i++)
+	for (int i{ 0 }; i < 18; i++)
 	{
 		m_pMenu[i].Char.UnicodeChar = menu[i];
-		m_pMenu[i].Attributes = ECHAR_COLOR::FG_WHITE;
+		m_pMenu[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_WHITE);
 	}
 }
 

@@ -44,18 +44,18 @@ private:
 	/// <summary>
 	/// start text position on screen
 	/// </summary>
-	SVector2 m_startTextPosition = SVector2();
+	SVector2 m_startTextPosition{ 0.0f, 0.0f };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// welcome text reference
 	/// </summary>
-	CHAR_INFO* m_pWelcome = nullptr;
+	CHAR_INFO* m_pWelcome{ nullptr };
 
 	/// <summary>
 	/// start text reference
 	/// </summary>
-	CHAR_INFO* m_pStart = nullptr;
+	CHAR_INFO* m_pStart{ nullptr };
 	#pragma endregion
 };

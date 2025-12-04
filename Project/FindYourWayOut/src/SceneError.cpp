@@ -15,35 +15,35 @@ SceneError::~SceneError()
 
 void SceneError::Init()
 {
-	const char* error = "ERROR!!!";
-	const char* key = "Press ESC to return to Menu!";
+	const char* error{ "ERROR!!!" };
+	const char* key{ "Press ESC to return to Menu!" };
+	const float screenWidthHalf{ Renderer::Get().GetScreenWidth() * 0.5f };
+	const float screenHeightHalf{ Renderer::Get().GetScreenHeight() * 0.5f };
 
 	m_pError = new CHAR_INFO[8];
 	m_pKey = new CHAR_INFO[28];
 
-	m_location.X = Renderer::Get().GetScreenWidth() / 2 - 4;
-	m_location.Y = Renderer::Get().GetScreenHeight() / 2;
+	m_location = { screenWidthHalf - 4.0f, screenHeightHalf };
 
-	m_keyTextPosition.X = Renderer::Get().GetScreenWidth() / 2 - 14;
-	m_keyTextPosition.Y = Renderer::Get().GetScreenHeight() / 2 + 1;
+	m_keyTextPosition = { screenWidthHalf - 14.0f, screenHeightHalf + 1.0f };
 
-	for (int i = 0; i < 8; i++)
+	for (int i{ 0 }; i < 8; i++)
 	{
 		m_pError[i].Char.UnicodeChar = error[i];
-		m_pError[i].Attributes = ECHAR_COLOR::FG_RED;
+		m_pError[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_RED);
 	}
 
-	for (int i = 0; i < 28; i++)
+	for (int i{ 0 }; i < 28; i++)
 	{
 		m_pKey[i].Char.UnicodeChar = key[i];
-		m_pKey[i].Attributes = ECHAR_COLOR::FG_WHITE;
+		m_pKey[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_WHITE);
 	}
 }
 
 void SceneError::Update(float _deltaSeconds)
 {
 	if (Input::IsKeyPressedThisFrame(VK_ESCAPE))
-		Game::Get().SwitchScene(MENU);
+		Game::Get().SwitchScene(ESCENE_TYPE::MENU);
 }
 
 void SceneError::Render()
@@ -59,7 +59,7 @@ void SceneError::SetErrorDetails(const char* _pDetails)
 {
 	m_detailsTextLength = 0;
 
-	for (int i = 0; i < Renderer::Get().GetScreenWidth(); i++)
+	for (int i{ 0 }; i < Renderer::Get().GetScreenWidth(); i++)
 	{
 		if(_pDetails[i] == '\0')
 			break;
@@ -73,14 +73,13 @@ void SceneError::SetErrorDetails(const char* _pDetails)
 	if (!m_detailsTextLength)
 		return;
 
-	m_detailsTextPosition.X = Renderer::Get().GetScreenWidth() / 2 - (m_detailsTextLength * 0.5f);
-	m_detailsTextPosition.Y = Renderer::Get().GetScreenHeight() / 2 + 3;
+	m_detailsTextPosition = { Renderer::Get().GetScreenWidth() * 0.5f - (m_detailsTextLength * 0.5f), Renderer::Get().GetScreenHeight() * 0.5f + 3.0f };
 
 	m_pDetails = new CHAR_INFO[m_detailsTextLength];
 
-	for (int i = 0; i < m_detailsTextLength; i++)
+	for (int i{ 0 }; i < m_detailsTextLength; i++)
 	{
 		m_pDetails[i].Char.UnicodeChar = _pDetails[i];
-		m_pDetails[i].Attributes = ECHAR_COLOR::FG_WHITE;
+		m_pDetails[i].Attributes = static_cast<unsigned short>(ECHAR_COLOR::FG_WHITE);
 	}
 }

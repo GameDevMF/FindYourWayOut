@@ -1,13 +1,14 @@
 #pragma once
 
-#pragma region include project
-#include "Object.hpp"
+#pragma region include system
+#include <memory>
 #pragma endregion
 
-#pragma region forward declaration
-class Camera;
-class HUD;
-class Minimap;
+#pragma region include project
+#include "Object.hpp"
+#include "Camera.hpp"
+#include "HUD.hpp"
+#include "Minimap.hpp"
 #pragma endregion
 
 /// <summary>
@@ -22,13 +23,6 @@ public:
 	/// </summary>
 	/// <param name="_location">world location to set</param>
 	Player(SVector2 _location) : Object(_location) {}
-	#pragma endregion
-
-	#pragma region destructor
-	/// <summary>
-	/// destructor
-	/// </summary>
-	~Player();
 	#pragma endregion
 
 	#pragma region virtual method
@@ -54,19 +48,19 @@ public:
 	/// set exit location
 	/// </summary>
 	/// <param name="_location">exit location to set</param>
-	inline void SetExitLocation(const SVector2 _location) { m_exitLocation = _location; }
+	inline void SetExitLocation(SVector2 _location) { m_exitLocation = _location; }
 
 	/// <summary>
 	/// get camera reference
 	/// </summary>
 	/// <returns>camera reference</returns>
-	inline Camera& const GetCamera() { return *m_pCamera; }
+	inline const Camera& GetCamera() const { return *m_pCamera.get(); }
 
 	/// <summary>
 	/// set heads up display reference
 	/// </summary>
 	/// <returns>heads up display reference</returns>
-	inline HUD& const GetHUD() { return *m_pHUD; }
+	inline const HUD& GetHUD() const { return *m_pHUD.get(); }
 	#pragma endregion
 
 private:
@@ -74,55 +68,55 @@ private:
 	/// <summary>
 	/// time left to finish the level
 	/// </summary>
-	float m_timeLeft = 0.0f;
+	float m_timeLeft{ 0.0f };
 
 	/// <summary>
 	/// value to calculate radiant to degree
 	/// </summary>
-	float m_radiantToDegreeCalculateValue = 0.0f;
+	float m_radiantToDegreeCalculateValue{ 0.0f };
 
 	/// <summary>
 	/// camera angle in radiant
 	/// </summary>
-	float m_cameraAngleRadiant = 0.0f;
+	float m_cameraAngleRadiant{ 0.0f };
 
 	/// <summary>
 	/// rotation speed in degree per second
 	/// </summary>
-	float m_rotationSpeed = 30.0f;
+	float m_rotationSpeed{ 30.0f };
 
 	/// <summary>
 	/// movement speed in cm per second
 	/// </summary>
-	float m_movementSpeed = 150.0f;
+	float m_movementSpeed{ 150.0f };
 	#pragma endregion
 
 	#pragma region variable
 	/// <summary>
 	/// forward vector
 	/// </summary>
-	SVector2 m_forward;
+	SVector2 m_forward{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// exit location to next level
 	/// </summary>
-	SVector2 m_exitLocation;
+	SVector2 m_exitLocation{ 0.0f, 0.0f };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// camera reference
 	/// </summary>
-	Camera* m_pCamera = nullptr;
+	std::unique_ptr<Camera> m_pCamera{ nullptr };
 
 	/// <summary>
 	/// heads up display reference
 	/// </summary>
-	HUD* m_pHUD = nullptr;
+	std::unique_ptr<HUD> m_pHUD{ nullptr };
 
 	/// <summary>
 	/// mini map reference
 	/// </summary>
-	Minimap* m_pMinimap = nullptr;
+	std::unique_ptr<Minimap> m_pMinimap{ nullptr };
 	#pragma endregion
 };
