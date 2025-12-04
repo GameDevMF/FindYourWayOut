@@ -52,35 +52,35 @@ private:
 	/// <summary>
 	/// length of details text
 	/// </summary>
-	int m_detailsTextLength = 0;
+	int m_detailsTextLength{ 0 };
 	#pragma endregion
 
 	#pragma region variable
 	/// <summary>
 	/// key text position on screen
 	/// </summary>
-	SVector2 m_keyTextPosition;
+	SVector2 m_keyTextPosition{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// details text position on screen
 	/// </summary>
-	SVector2 m_detailsTextPosition;
+	SVector2 m_detailsTextPosition{ 0.0f, 0.0f };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// error text reference
 	/// </summary>
-	CHAR_INFO* m_pError = nullptr;
+	CHAR_INFO* m_pError{ nullptr };
 
 	/// <summary>
 	/// key text reference
 	/// </summary>
-	CHAR_INFO* m_pKey = nullptr;
+	CHAR_INFO* m_pKey{ nullptr };
 
 	/// <summary>
 	/// details text reference
 	/// </summary>
-	CHAR_INFO* m_pDetails = nullptr;
+	CHAR_INFO* m_pDetails{ nullptr };
 	#pragma endregion
 };

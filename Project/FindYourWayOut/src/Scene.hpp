@@ -1,7 +1,6 @@
 #pragma once
 
 #pragma region include project
-#include "Game.hpp"
 #include "ObjectManager.hpp"
 #include "Object.hpp"
 #pragma endregion
@@ -12,18 +11,12 @@
 class Scene : public Object
 {
 public:
+	#pragma region destructor
 	/// <summary>
 	/// destructor
 	/// </summary>
-	virtual ~Scene()
-	{
-		if (Game::Get().GetLevel())
-			// clear all objects including player if menu level
-			ObjectManager::Get().ClearLevel(true);
-		else
-			// clear only level objects if game level
-			ObjectManager::Get().ClearLevel(false);
-	}
+	virtual ~Scene();
+	#pragma endregion
 
 	#pragma region override method
 	/// <summary>

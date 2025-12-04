@@ -49,7 +49,7 @@ public:
 	/// set exit location
 	/// </summary>
 	/// <param name="_location">exit location to set</param>
-	inline void SetExitLocation(const SVector2 _location) { m_exitLocation = _location; }
+	inline void SetExitLocation(SVector2 _location) { m_exitLocation = _location; }
 	#pragma endregion
 
 	#pragma region method
@@ -83,181 +83,181 @@ private:
 	/// <summary>
 	/// if raytracer needed variables are set
 	/// </summary>
-	bool m_prepared = false;
+	bool m_prepared{ false };
 
 	/// <summary>
 	/// check horizontal walls
 	/// </summary>
-	bool m_isHorizontalCheck = true;
+	bool m_isHorizontalCheck{ true };
 
 	/// <summary>
 	/// start position of wall at screen height
 	/// </summary>
-	int m_renderStartPos = 0;
+	int m_renderStartPos{ 0 };
 
 	/// <summary>
 	/// render height of wall at screen height
 	/// </summary>
-	int m_renderHeight = 0;
+	int m_renderHeight{ 0 };
 
 	/// <summary>
 	/// camera x location at full integer value
 	/// </summary>
-	int m_cameraIntX = static_cast<int>(m_cameraLocation.X);
+	int m_cameraIntX{ 0 };
 
 	/// <summary>
 	/// camera y location at full integer value
 	/// </summary>
-	int m_cameraIntY = static_cast<int>(m_cameraLocation.Y);
+	int m_cameraIntY{ 0 };
 
 	/// <summary>
 	/// screen height in chars
 	/// </summary>
-	int m_screenHeight = 0;
+	int m_screenHeight{ 0 };
 
 	/// <summary>
 	/// screen width in chars
 	/// </summary>
-	int m_screenWidth = 0;
+	int m_screenWidth{ 0 };
 
 	/// <summary>
 	/// size of a tile in the level
 	/// </summary>
-	int m_tileSize = 0;
+	int m_tileSize{ 0 };
 
 	/// <summary>
 	/// max view distance in cm
 	/// </summary>
-	int m_maxViewDistance = 0;
+	int m_maxViewDistance{ 0 };
 
 	/// <summary>
 	/// how many steps the current trace has made
 	/// </summary>
-	int m_traceSteps = 0;
+	int m_traceSteps{ 0 };
 
 	/// <summary>
 	/// max steps for one trace
 	/// </summary>
-	int m_traceStepsMax = 0;
+	int m_traceStepsMax{ 0 };
 
 	/// <summary>
 	/// max wall height from bottom to start in cm
 	/// </summary>
-	int m_maxWallHeight = 0;
+	int m_maxWallHeight{ 0 };
 
 	/// <summary>
 	/// angle between camera and exit location to check if in view
 	/// </summary>
-	float m_angleBetweenCameraAndExitLocation = 0.0f;
+	float m_angleBetweenCameraAndExitLocation{ 0.0f };
 
 	/// <summary>
 	/// previous angle between camera and exit location to check if in view
 	/// </summary>
-	float m_previousAngleBetweenCameraAndExitLocation = 0.0f;
+	float m_previousAngleBetweenCameraAndExitLocation{ 0.0f };
 
 	/// <summary>
 	/// half field of view horizontal
 	/// </summary>
-	float m_halfHorizontalFov = 0.0f;
+	float m_halfHorizontalFov{ 0.0f };
 
 	/// <summary>
 	/// current trace line angle in degree
 	/// </summary>
-	float m_currentTraceLineAngleDegree = 0.0f;
+	float m_currentTraceLineAngleDegree{ 0.0f };
 
 	/// <summary>
 	/// current trace line angle in radiant
 	/// </summary>
-	float m_currentTraceLineAngleRadiant = 0.0f;
+	float m_currentTraceLineAngleRadiant{ 0.0f };
 
 	/// <summary>
 	/// angle per trace line in degree
 	/// </summary>
-	float m_anglePerLineDegree = 0.0f;
+	float m_anglePerLineDegree{ 0.0f };
 
 	/// <summary>
 	/// angle to wall
 	/// </summary>
-	float m_traceAngleToWall = 0.0f;
+	float m_traceAngleToWall{ 0.0f };
 
 	/// <summary>
 	/// distance to camera from hit location
 	/// </summary>
-	float m_distanceToCamera = 0.0f;
+	float m_distanceToCamera{ 0.0f };
 
 	/// <summary>
 	/// height in cm at hit location depending on field of view vertical
 	/// </summary>
-	float m_heightFovVerticalAtDistanceToCamera = 0.0f;
+	float m_heightFovVerticalAtDistanceToCamera{ 0.0f };
 
 	/// <summary>
 	/// value to calculate height at hit location
 	/// </summary>
-	float m_distanceToCameraToHeightCalculateValue = 0.0f;
+	float m_distanceToCameraToHeightCalculateValue{ 0.0f };
 
 	/// <summary>
 	/// distance to wall from top at hit location from height
 	/// </summary>
-	float m_distanceToWallFromFovHeight = 0.0f;
+	float m_distanceToWallFromFovHeight{ 0.0f };
 
 	/// <summary>
 	/// radiant calculate value
 	/// </summary>
-	float m_radiantToDegreeCalculateValue = 0.0f;
+	float m_radiantToDegreeCalculateValue{ 0.0f };
 	#pragma endregion
 
 	#pragma region variable
 	/// <summary>
 	/// current trace line forward vector
 	/// </summary>
-	SVector2 m_currentTraceLineForward;
+	SVector2 m_currentTraceLineForward{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// forward vector of horizontal wall check
 	/// </summary>
-	SVector2 m_horizontalCheckForward;
+	SVector2 m_horizontalCheckForward{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// forward vector of vertical wall check
 	/// </summary>
-	SVector2 m_verticalCheckForward;
+	SVector2 m_verticalCheckForward{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// location to check at horizontal wall
 	/// </summary>
-	SVector2 m_horizontalCheckLocation;
+	SVector2 m_horizontalCheckLocation{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// location to check at vertical wall
 	/// </summary>
-	SVector2 m_verticalCheckLocation;
+	SVector2 m_verticalCheckLocation{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// camera location
 	/// </summary>
-	SVector2 m_cameraLocation;
+	SVector2 m_cameraLocation{ 0.0f, 0.0f };
 
 	/// <summary>
 	/// exit location
 	/// </summary>
-	SVector2 m_exitLocation;
+	SVector2 m_exitLocation{ 0.0f, 0.0f };
 	#pragma endregion
 
 	#pragma region pointer
 	/// <summary>
 	/// height in pixel where wall starts at every horizontal line
 	/// </summary>
-	int* m_pWallStartHeight = nullptr;
+	int* m_pWallStartHeight{ nullptr };
 
 	/// <summary>
 	/// distance to camera of every horizontal line
 	/// </summary>
-	float* m_pLineDistance = nullptr;
+	float* m_pLineDistance{ nullptr };
 
 	/// <summary>
 	/// vertical screen line char info
 	/// </summary>
-	CHAR_INFO* m_pCurrentLineCharInfo = nullptr;
+	CHAR_INFO* m_pCurrentLineCharInfo{ nullptr };
 	#pragma endregion
 
 	#pragma region method
@@ -290,7 +290,7 @@ private:
 	/// trace along line to calculate distance to camera if hit
 	/// </summary>
 	/// <param name="_currentLine">current screen vertical line</param>
-	void TraceAlongLine(const int& _currentLine);
+	void TraceAlongLine(int _currentLine);
 
 	/// <summary>
 	/// if current check hits a wall
@@ -302,7 +302,7 @@ private:
 	/// set all chars in current height line
 	/// </summary>
 	/// <param name="_currentLine">current screen vertical line</param>
-	void SetHeightLineChars(const int& _currentLine);
+	void SetHeightLineChars(int _currentLine);
 
 	/// <summary>
 	/// trace from camera to exit location

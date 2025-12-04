@@ -42,43 +42,43 @@ public:
 	/// get field of view
 	/// </summary>
 	/// <returns>field of view</returns>
-	inline const SVector2& GetFov() const { return m_fov; }
+	inline SVector2 GetFov() const { return m_fov; }
 
 	/// <summary>
 	/// set field of view
 	/// </summary>
 	/// <param name="_fov">field of view to set</param>
-	inline void SetFov(const SVector2& _fov) { m_fov = _fov; }
+	inline void SetFov(SVector2 _fov) { m_fov = _fov; }
 
 	/// <summary>
 	/// get angle of camera
 	/// </summary>
 	/// <returns>angle of camera</returns>
-	inline const float& GetAngle() const { return m_angle; }
+	constexpr float GetAngle() const noexcept { return m_angle; }
 
 	/// <summary>
 	/// set angle of camera
 	/// </summary>
 	/// <param name="_fov">angle to set</param>
-	inline void SetAngle(const float& _angle) { m_angle = _angle < 0.0f ? _angle + 360.0f : _angle; }
+	constexpr void SetAngle(float _angle) noexcept { m_angle = _angle < 0.0f ? _angle + 360.0f : _angle; }
 
 	/// <summary>
 	/// get height in cm
 	/// </summary>
 	/// <returns>height of camera in cm</returns>
-	inline const int& GetHeight() const { return m_height; }
+	constexpr int GetHeight() const noexcept { return m_height; }
 
 	/// <summary>
 	/// get max view distance in cm
 	/// </summary>
 	/// <returns>max view distance in cm</returns>
-	inline const int& GetMaxViewDistance() const { return m_maxViewDistance; }
+	constexpr int GetMaxViewDistance() const noexcept { return m_maxViewDistance; }
 
 	/// <summary>
 	/// set max view distance in cm
 	/// </summary>
 	/// <param name="_maxViewDistance">max view distance in cm to set</param>
-	inline void SetMaxViewDistance(int _maxViewDistance) { m_maxViewDistance = _maxViewDistance; }
+	constexpr void SetMaxViewDistance(int _maxViewDistance) noexcept { m_maxViewDistance = _maxViewDistance; }
 	#pragma endregion
 
 private:
@@ -86,21 +86,21 @@ private:
 	/// <summary>
 	/// field of view
 	/// </summary>
-	SVector2 m_fov = SVector2(120.0f, 60.0f);
+	SVector2 m_fov{ 120.0f, 60.0f };
 
 	/// <summary>
 	/// height of camera
 	/// </summary>
-	int m_height = 100.0f;
+	int m_height{ 100 };
 
 	/// <summary>
 	/// current angle
 	/// </summary>
-	float m_angle = 0.0f;
+	float m_angle{ 0.0f };
 
 	/// <summary>
 	/// maximum view distance in cm
 	/// </summary>
-	int m_maxViewDistance = 5000;
+	int m_maxViewDistance{ 5000 };
 	#pragma endregion
 };

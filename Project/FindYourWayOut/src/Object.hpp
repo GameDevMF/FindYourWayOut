@@ -1,6 +1,7 @@
 #pragma once
 
 #pragma region include project
+#include "Enums.hpp"
 #include "Vector2.hpp"
 #pragma endregion
 
@@ -50,23 +51,34 @@ public:
 
 	#pragma region inline method
 	/// <summary>
+	/// get class type
+	/// </summary>
+	/// <returns>class type</returns>
+	constexpr ECLASS_TYPE GetClassType() const noexcept { return m_classType; }
+
+	/// <summary>
 	/// get world location of object
 	/// </summary>
 	/// <returns></returns>
-	inline const SVector2& GetLocation() const { return m_location; }
+	inline SVector2 GetLocation() const { return m_location; }
 
 	/// <summary>
 	/// set world location
 	/// </summary>
 	/// <param name="_location">world location</param>
-	inline void SetLocation(const SVector2& _location) { m_location = _location; }
+	inline void SetLocation(SVector2 _location) { m_location = _location; }
 	#pragma endregion
 
 protected:
 	#pragma region variable
 	/// <summary>
+	/// type of class
+	/// </summary>
+	ECLASS_TYPE m_classType{ ECLASS_TYPE::OBJECT };
+
+	/// <summary>
 	/// world location of object
 	/// </summary>
-	SVector2 m_location = SVector2();
+	SVector2 m_location{ 0.0f, 0.0f };
 	#pragma endregion
 };

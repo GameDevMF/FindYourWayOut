@@ -56,7 +56,7 @@ public:
 	/// update time left
 	/// </summary>
 	/// <param name="_time">current time left</param>
-	void UpdateTimeLeft(const int _time);
+	void UpdateTimeLeft(int _time);
 	#pragma endregion
 
 private:
@@ -64,6 +64,6 @@ private:
 	/// <summary>
 	/// mini map char info
 	/// </summary>
-	CHAR_INFO* m_pCharInfo = nullptr;
+	CHAR_INFO* m_pCharInfo{ nullptr };
 	#pragma endregion
 };

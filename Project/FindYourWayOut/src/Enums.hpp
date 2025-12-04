@@ -3,7 +3,7 @@
 /// <summary>
 /// char color
 /// </summary>
-enum ECHAR_COLOR
+enum class ECHAR_COLOR
 {
 	FG_BLACK = 0x0000,
 	FG_DARK_BLUE = 0x0001,
@@ -58,7 +58,7 @@ enum ECHAR_COLOR
 /// <summary>
 /// char type
 /// </summary>
-enum ECHAR_TYPE
+enum class ECHAR_TYPE
 {
 	SOLID = 0x2588,
 	DARK_SHADE = 0x2593,
@@ -69,11 +69,20 @@ enum ECHAR_TYPE
 /// <summary>
 /// scene type
 /// </summary>
-enum ESCENE_TYPE
+enum class ESCENE_TYPE
 {
 	MENU = 0,
 	LEVEL = 1,
 	GAME_WIN = 100,
 	GAME_OVER = 101,
 	SHOW_ERROR = 102,
+};
+
+/// <summary>
+/// class type
+/// </summary>
+enum class ECLASS_TYPE
+{
+	OBJECT,
+	WALL,
 };

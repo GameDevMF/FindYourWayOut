@@ -21,126 +21,109 @@ void ObjectManager::Update(float _deltaSeconds)
 
 	// update objects below x and below y player chunk
 	if (m_playerChunk.X > 0.0f && m_playerChunk.Y > 0.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X - 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X - 1.0f))])
 			pObject->Update(_deltaSeconds);
 
 	// update objects x and below y player chunk
 	if (m_playerChunk.Y > 0.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y - 1.0f) * m_levelChunkCount.X) + m_playerChunk.X)])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y - 1.0f) * m_levelChunkCount.X) + m_playerChunk.X)])
 			pObject->Update(_deltaSeconds);
 
 	// update objects above x and below y player chunk
 	if (m_playerChunk.X < m_levelChunkCount.X - 1.0f && m_playerChunk.Y > 0.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X + 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X + 1.0f))])
 			pObject->Update(_deltaSeconds);
 
 	// update objects below x and y player chunk
 	if (m_playerChunk.X > 0.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>((m_playerChunk.Y * m_levelChunkCount.X) + (m_playerChunk.X - 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>((m_playerChunk.Y * m_levelChunkCount.X) + (m_playerChunk.X - 1.0f))])
 			pObject->Update(_deltaSeconds);
 
 	// update objects where the player location is
-	for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>((m_playerChunk.Y * m_levelChunkCount.X) + m_playerChunk.X)])
+	for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>((m_playerChunk.Y * m_levelChunkCount.X) + m_playerChunk.X)])
 		pObject->Update(_deltaSeconds);
 
 	// update objects above x and y player chunk
 	if (m_playerChunk.X < m_levelChunkCount.X - 1.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>((m_playerChunk.Y * m_levelChunkCount.X) + (m_playerChunk.X + 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>((m_playerChunk.Y * m_levelChunkCount.X) + (m_playerChunk.X + 1.0f))])
 			pObject->Update(_deltaSeconds);
 
 	// update objects below x and above y player chunk
 	if (m_playerChunk.X > 0.0f && m_playerChunk.Y < m_levelChunkCount.Y - 1.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X - 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X - 1.0f))])
 			pObject->Update(_deltaSeconds);
 
 	// update objects x and above y player chunk
 	if (m_playerChunk.Y < m_levelChunkCount.Y - 1.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y + 1.0f) * m_levelChunkCount.X) + m_playerChunk.X)])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y + 1.0f) * m_levelChunkCount.X) + m_playerChunk.X)])
 			pObject->Update(_deltaSeconds);
 
 	// update objects above x and above y player chunk
 	if (m_playerChunk.X < m_levelChunkCount.X - 1.0f && m_playerChunk.Y < m_levelChunkCount.Y - 1.0f)
-		for (Object* pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X + 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pDynamicObjectChunks[static_cast<int>(((m_playerChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_playerChunk.X + 1.0f))])
 			pObject->Update(_deltaSeconds);
 
+	const SVector2 playerLocation{ m_pPlayer->GetLocation() };
+	const float chunkX{ m_playerChunk.X * m_levelConfig.CameraMaxViewDistance };
+	const float chunkY{ m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance };
+
 	// player moved to chunk below x and below y
-	if (m_pPlayer->GetLocation().X < m_playerChunk.X * m_levelConfig.CameraMaxViewDistance && m_pPlayer->GetLocation().Y < m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance)
+	if (playerLocation.X < chunkX && playerLocation.Y < chunkY)
 	{
 		ChangePlayerChunk(m_playerChunk.X - 1, m_playerChunk.Y - 1);
 	}
 
 	// player moved to chunk below y
-	else if (m_pPlayer->GetLocation().X >= m_playerChunk.X * m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().X < m_playerChunk.X * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y < m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X >= chunkX &&
+		playerLocation.X < chunkX + m_levelConfig.CameraMaxViewDistance &&
+		playerLocation.Y < chunkY)
 	{
 		ChangePlayerChunk(m_playerChunk.X, m_playerChunk.Y - 1);
 	}
 
 	// player moved to chunk above x and below y
-	else if (m_pPlayer->GetLocation().X >= m_playerChunk.X * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y < m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X >= chunkX + m_levelConfig.CameraMaxViewDistance &&
+		playerLocation.Y < chunkY)
 	{
 		ChangePlayerChunk(m_playerChunk.X + 1, m_playerChunk.Y - 1);
 	}
 
 	// player moved to chunk below x
-	else if (m_pPlayer->GetLocation().X < m_playerChunk.X * m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y >= m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y < m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X < chunkX &&
+		playerLocation.Y >= chunkY &&
+		playerLocation.Y < chunkY + m_levelConfig.CameraMaxViewDistance)
 	{
 		ChangePlayerChunk(m_playerChunk.X - 1, m_playerChunk.Y);
 	}
 
 	// player moved to chunk above x
-	else if (m_pPlayer->GetLocation().X >= m_playerChunk.X * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y >= m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y < m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X >= chunkX + m_levelConfig.CameraMaxViewDistance &&
+		playerLocation.Y >= chunkY &&
+		playerLocation.Y < chunkY + m_levelConfig.CameraMaxViewDistance)
 	{
 		ChangePlayerChunk(m_playerChunk.X + 1, m_playerChunk.Y);
 	}
 
 	// player moved to chunk below x and above y
-	else if (m_pPlayer->GetLocation().X < m_playerChunk.X * m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y >= m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X < chunkX &&
+		playerLocation.Y >= chunkY + m_levelConfig.CameraMaxViewDistance)
 	{
 		ChangePlayerChunk(m_playerChunk.X - 1, m_playerChunk.Y + 1);
 	}
 
 	// player moved to chunk above y
-	else if (m_pPlayer->GetLocation().X >= m_playerChunk.X * m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().X < m_playerChunk.X * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y >= m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X >= chunkX &&
+		playerLocation.X < chunkX + m_levelConfig.CameraMaxViewDistance &&
+		playerLocation.Y >= chunkY + m_levelConfig.CameraMaxViewDistance)
 	{
 		ChangePlayerChunk(m_playerChunk.X, m_playerChunk.Y + 1);
 	}
 
 	// player moved to chunk above x and above y
-	else if (m_pPlayer->GetLocation().X >= m_playerChunk.X * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance &&
-		m_pPlayer->GetLocation().Y >= m_playerChunk.Y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
+	else if (playerLocation.X >= chunkX + m_levelConfig.CameraMaxViewDistance &&
+		playerLocation.Y >= chunkY + m_levelConfig.CameraMaxViewDistance)
 	{
 		ChangePlayerChunk(m_playerChunk.X + 1, m_playerChunk.Y + 1);
-	}
-
-	// loop until no objects to remove left
-	while (!m_objectsToRemove.empty())
-	{
-		Object* pObject = m_objectsToRemove.front();
-
-		m_pStaticObjects.remove(pObject);
-		m_pDynamicObjects.remove(pObject);
-
-		for (int y = 0; y < m_levelChunkCount.Y; y++)
-		{
-			for (int x = 0; x < m_levelChunkCount.X; x++)
-			{
-				m_pStaticObjectChunks[y * static_cast<int>(m_levelChunkCount.X) + x].remove(pObject);
-				m_pDynamicObjectChunks[y * static_cast<int>(m_levelChunkCount.X) + x].remove(pObject);
-			}
-		}
-
-		m_objectsToRemove.remove(pObject);
-		delete pObject;
 	}
 }
 
@@ -166,49 +149,32 @@ void ObjectManager::ClearLevel(bool _keepPlayer)
 	m_pDynamicObjectChunks = nullptr;
 
 	// delete every static object
-	if (m_pStaticObjects.size())
-	{
-		for (Object* pObject : m_pStaticObjects)
-			delete pObject;
-		m_pStaticObjects.clear();
-	}
+	if (m_staticObjects.size())
+		m_staticObjects.clear();
 
 	// delete every dynamic object
-	if (m_pDynamicObjects.size())
-	{
-		for (Object* pObject : m_pDynamicObjects)
-			delete pObject;
-		m_pDynamicObjects.clear();
-	}
-
-	if(_keepPlayer || !m_pPlayer)
-		return;
-	
-	delete m_pPlayer;
-	m_pPlayer = nullptr;
-}
-
-void ObjectManager::RemoveObject(Object* _pObject)
-{
-	m_objectsToRemove.push_back(_pObject);
+	if (m_dynamicObjects.size())
+		m_dynamicObjects.clear();
 }
 
 bool ObjectManager::HitWall(SVector2 _location)
 {
-	for (int y = 0; y < m_levelChunkCount.Y; y++)
+	for (int y{ 0 }; y < m_levelChunkCount.Y; y++)
 	{
-		for (int x = 0; x < m_levelChunkCount.X; x++)
+		for (int x{ 0 }; x < m_levelChunkCount.X; x++)
 		{
+			const float chunkMinX{ static_cast<float>(x * m_levelConfig.CameraMaxViewDistance) };
+			const float chunkMaxX{ static_cast<float>(chunkMinX + m_levelConfig.CameraMaxViewDistance) };
+
+			const float chunkMinY{ static_cast<float>(y * m_levelConfig.CameraMaxViewDistance) };
+			const float chunkMaxY{ static_cast<float>(chunkMinY + m_levelConfig.CameraMaxViewDistance) };
+
 			// if object is in current chunk
-			if ((_location.X >= x * m_levelConfig.CameraMaxViewDistance &&
-				_location.X < x * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
-				&&
-				(_location.Y >= y * m_levelConfig.CameraMaxViewDistance &&
-					_location.Y < y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance))
+			if (_location.X >= chunkMinX && _location.X < chunkMaxX &&
+				_location.Y >= chunkMinY && _location.Y < chunkMaxY)
 			{
 				// set hit chunk
-				m_hitChunk.X = x;
-				m_hitChunk.Y = y;
+				m_hitChunk = { static_cast<float>(x), static_cast<float>(y) };
 			}
 		}
 	}
@@ -216,9 +182,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk below x and below y of hit chunk for collision with wall
 	if (m_hitChunk.X > 0.0f && m_hitChunk.Y > 0.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X - 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X - 1.0f))])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -231,9 +197,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk x and below y of hit chunk for collision with wall
 	if (m_hitChunk.Y > 0.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y - 1.0f) * m_levelChunkCount.X) + m_hitChunk.X)])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y - 1.0f) * m_levelChunkCount.X) + m_hitChunk.X)])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -246,9 +212,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk above x and below y of hit chunk for collision with wall
 	if (m_hitChunk.X < m_levelChunkCount.X - 1.0f && m_hitChunk.Y > 0.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X + 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y - 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X + 1.0f))])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -261,9 +227,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk below x and y of hit chunk for collision with wall
 	if (m_hitChunk.X > 0.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>((m_hitChunk.Y * m_levelChunkCount.X) + (m_hitChunk.X - 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>((m_hitChunk.Y * m_levelChunkCount.X) + (m_hitChunk.X - 1.0f))])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -274,9 +240,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	}
 
 	// check objects in chunk where the location is of hit chunk for collision with wall
-	for (Object* pObject : m_pStaticObjectChunks[static_cast<int>((m_hitChunk.Y * m_levelChunkCount.X) + m_hitChunk.X)])
+	for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>((m_hitChunk.Y * m_levelChunkCount.X) + m_hitChunk.X)])
 	{
-		if (dynamic_cast<Wall*>(pObject))
+		if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 		{
 			// if location is inside the wall return collision true
 			if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -288,9 +254,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk above x and y of hit chunk for collision with wall
 	if (m_hitChunk.X < m_levelChunkCount.X - 1.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>((m_hitChunk.Y * m_levelChunkCount.X) + (m_hitChunk.X + 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>((m_hitChunk.Y * m_levelChunkCount.X) + (m_hitChunk.X + 1.0f))])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -303,9 +269,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk below x and above y of hit chunk for collision with wall
 	if (m_hitChunk.X > 0.0f && m_hitChunk.Y < m_levelChunkCount.Y - 1.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X - 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X - 1.0f))])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -318,9 +284,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk x and above y of hit chunk for collision with wall
 	if (m_hitChunk.Y < m_levelChunkCount.Y - 1.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y + 1.0f) * m_levelChunkCount.X) + m_hitChunk.X)])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y + 1.0f) * m_levelChunkCount.X) + m_hitChunk.X)])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -333,9 +299,9 @@ bool ObjectManager::HitWall(SVector2 _location)
 	// check objects in chunk above x and above y of hit chunk for collision with wall
 	if (m_hitChunk.X < m_levelChunkCount.X - 1.0f && m_hitChunk.Y < m_levelChunkCount.Y - 1.0f)
 	{
-		for (Object* pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X + 1.0f))])
+		for (const std::shared_ptr<Object>& pObject : m_pStaticObjectChunks[static_cast<int>(((m_hitChunk.Y + 1.0f) * m_levelChunkCount.X) + (m_hitChunk.X + 1.0f))])
 		{
-			if (dynamic_cast<Wall*>(pObject))
+			if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 			{
 				// if location is inside the wall return collision true
 				if (_location.X >= pObject->GetLocation().X && _location.X <= pObject->GetLocation().X + m_levelConfig.TileSizeCm &&
@@ -351,7 +317,7 @@ bool ObjectManager::HitWall(SVector2 _location)
 
 void ObjectManager::ResetLevelConfig()
 {
-	m_levelConfig.CameraFOV = SVector2(90.0f, 90.0f);
+	m_levelConfig.CameraFOV = { 90.0f, 90.0f };
 	m_levelConfig.CameraMaxViewDistance = 500;
 	m_levelConfig.TileSizeCm = 0;
 	m_levelConfig.LastLevel = false;
@@ -366,7 +332,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 	m_isLevelConfigLoadError = false;
 
 	// get level file from game level
-	std::string file = "Assets/level_";
+	std::string file{ "Assets/level_" };
 	file += std::to_string(Game::Get().GetLevel());
 	file += ".cfg";
 
@@ -375,7 +341,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 	// if file could not open show error scene and return
 	if (!infile.is_open())
 	{
-		std::string errorText = "Code 10: File ";
+		std::string errorText{ "Code 10: File " };
 		errorText += file;
 		errorText += " failed to open!";
 		
@@ -393,7 +359,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 		// if no separator in line show error scene and return
 		if (!line.find(':'))
 		{
-			std::string errorText = "Code 12: Separator : is missing in ";
+			std::string errorText{ "Code 12: Separator : is missing in " };
 			errorText += file;
 			errorText += ", Line: '";
 			errorText += line;
@@ -410,7 +376,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 		// if key or value empty show error scene and return
 		if (!key.size() || !value.size())
 		{
-			std::string errorText = "Code 13: Key or Value missing in ";
+			std::string errorText{ "Code 13: Key or Value missing in " };
 			errorText += file;
 			errorText += ", Line: '";
 			errorText += line;
@@ -444,7 +410,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 	// if no wall char set show error scene and return
 	if (m_levelConfig.WallChar == 32)
 	{
-		std::string errorText = "Code 14: No wall char set in File '";
+		std::string errorText{ "Code 14: No wall char set in File '" };
 		errorText += file;
 		errorText += "'";
 
@@ -456,7 +422,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 	// if no exit char set show error scene and return
 	if (m_levelConfig.ExitChar == 32)
 	{
-		std::string errorText = "Code 15: No exit char set in File '";
+		std::string errorText{ "Code 15: No exit char set in File '" };
 		errorText += file;
 		errorText += "'";
 
@@ -468,7 +434,7 @@ void ObjectManager::LoadLevelConfigFromFile()
 	// if no player char set show error scene and return
 	if (m_levelConfig.PlayerChar == 32)
 	{
-		std::string errorText = "Code 16: No player char set in File '";
+		std::string errorText{ "Code 16: No player char set in File '" };
 		errorText += file;
 		errorText += "'";
 
@@ -484,7 +450,7 @@ void ObjectManager::LoadLevelMapFromFile()
 		return;
 
 	// get level file from game level
-	std::string file = "Assets/level_";
+	std::string file{ "Assets/level_" };
 	file += std::to_string(Game::Get().GetLevel());
 	file += ".map";
 
@@ -493,7 +459,7 @@ void ObjectManager::LoadLevelMapFromFile()
 	// if file could not open show error scene and return
 	if (!infile.is_open())
 	{
-		std::string errorText = "Code 17: File ";
+		std::string errorText{ "Code 17: File " };
 		errorText += file;
 		errorText += " failed to open!";
 
@@ -503,16 +469,17 @@ void ObjectManager::LoadLevelMapFromFile()
 
 	std::string line;
 
-	m_levelChunkCount.X = 0;
-	m_levelChunkCount.Y = 0;
+	m_levelChunkCount = { 0, 0 };
 
-	SVector2 exitLocation(-1.0f, -1.0f);
+	SVector2 exitLocation{ -1.0f, -1.0f };
+
+	const float tileSizeHalf{ m_levelConfig.TileSizeCm * 0.5f };
 
 	while (std::getline(infile, line))
 	{
-		int levelSizeX = 0;
+		int levelSizeX{ 0 };
 
-		for (int i = 0; i < line.size(); i++)
+		for (int i{ 0 }; i < line.size(); i++)
 		{
 			levelSizeX++;
 
@@ -521,24 +488,22 @@ void ObjectManager::LoadLevelMapFromFile()
 
 			if (line[i] == m_levelConfig.WallChar)
 			{
-				Object* pWall = new Wall({ static_cast<float>(i) * m_levelConfig.TileSizeCm, m_levelChunkCount.Y * m_levelConfig.TileSizeCm });
-				m_pStaticObjects.push_back(pWall);
+				m_staticObjects.push_back(std::make_shared<Wall>(SVector2(static_cast<float>(i) * m_levelConfig.TileSizeCm, m_levelChunkCount.Y * m_levelConfig.TileSizeCm)));
 			}
 			else if (line[i] == m_levelConfig.PlayerChar)
 			{
 				if (!m_pPlayer)
-					m_pPlayer = new Player({ i * m_levelConfig.TileSizeCm + m_levelConfig.TileSizeCm * 0.5f,
-						m_levelChunkCount.Y * m_levelConfig.TileSizeCm + m_levelConfig.TileSizeCm * 0.5f });
+					m_pPlayer = std::make_shared<Player>(SVector2(i * m_levelConfig.TileSizeCm + tileSizeHalf,
+						m_levelChunkCount.Y * m_levelConfig.TileSizeCm + tileSizeHalf));
 				else
-					m_pPlayer->SetLocation({ i * m_levelConfig.TileSizeCm + m_levelConfig.TileSizeCm * 0.5f,
-						m_levelChunkCount.Y * m_levelConfig.TileSizeCm + m_levelConfig.TileSizeCm * 0.5f });
+					m_pPlayer->SetLocation({ i * m_levelConfig.TileSizeCm + tileSizeHalf,
+						m_levelChunkCount.Y * m_levelConfig.TileSizeCm + tileSizeHalf });
 
 				m_pPlayer->Init();
 			}
 			else if (line[i] == m_levelConfig.ExitChar)
 			{
-				exitLocation.X = i * m_levelConfig.TileSizeCm + (m_levelConfig.TileSizeCm * 0.5f);
-				exitLocation.Y = m_levelChunkCount.Y * m_levelConfig.TileSizeCm + (m_levelConfig.TileSizeCm * 0.5f);
+				exitLocation = { i * m_levelConfig.TileSizeCm + tileSizeHalf, m_levelChunkCount.Y * m_levelConfig.TileSizeCm + tileSizeHalf };
 
 				Raytracer::Get().SetExitLocation(exitLocation);
 			}
@@ -553,7 +518,7 @@ void ObjectManager::LoadLevelMapFromFile()
 	// if no player
 	if (!m_pPlayer)
 	{
-		std::string errorText = "Code 18: No Player was create from file: '";
+		std::string errorText{ "Code 18: No Player was create from file: '" };
 		errorText += file;
 		errorText += "'";
 
@@ -564,7 +529,7 @@ void ObjectManager::LoadLevelMapFromFile()
 	// if exit location below level show error scene and return
 	if (exitLocation.X <= 0.0f || exitLocation.Y <= 0.0f)
 	{
-		std::string errorText = "Code 19: Exit Location is below level in map: '";
+		std::string errorText{ "Code 19: Exit Location is below level in map: '" };
 		errorText += file;
 		errorText += "'";
 
@@ -575,14 +540,13 @@ void ObjectManager::LoadLevelMapFromFile()
 	m_pPlayer->SetExitLocation(exitLocation);
 
 	// calculate size of one chunk
-	int tilesPerChunk = static_cast<int>(m_levelConfig.CameraMaxViewDistance / m_levelConfig.TileSizeCm);
+	const int tilesPerChunk{ static_cast<int>(m_levelConfig.CameraMaxViewDistance / m_levelConfig.TileSizeCm) };
 
 	// calculate level chunk count
-	m_levelChunkCount.X = static_cast<int>(m_levelChunkCount.X / tilesPerChunk + 1.0f);
-	m_levelChunkCount.Y = static_cast<int>(m_levelChunkCount.Y / tilesPerChunk + 1.0f);
+	m_levelChunkCount = { static_cast<float>(static_cast<int>(m_levelChunkCount.X / tilesPerChunk + 1.0f)), static_cast<float>(static_cast<int>(m_levelChunkCount.Y / tilesPerChunk + 1.0f)) };
 
-	m_pStaticObjectChunks = new std::list<Object*>[m_levelChunkCount.X * m_levelChunkCount.Y];
-	m_pDynamicObjectChunks = new std::list<Object*>[m_levelChunkCount.X * m_levelChunkCount.Y];
+	m_pStaticObjectChunks = new std::list<std::shared_ptr<Object>>[m_levelChunkCount.X * m_levelChunkCount.Y];
+	m_pDynamicObjectChunks = new std::list<std::shared_ptr<Object>>[m_levelChunkCount.X * m_levelChunkCount.Y];
 	SplitObjectsInChunks();
 
 	Raytracer::Get().Prepare();
@@ -590,24 +554,30 @@ void ObjectManager::LoadLevelMapFromFile()
 
 void ObjectManager::SplitObjectsInChunks()
 {
-	for (int y = 0; y < m_levelChunkCount.Y; y++)
+	const SVector2 playerLocation{ m_pPlayer->GetLocation() };
+
+	for (int y{ 0 }; y < m_levelChunkCount.Y; y++)
 	{
-		for (int x = 0; x < m_levelChunkCount.X; x++)
+		for (int x{ 0 }; x < m_levelChunkCount.X; x++)
 		{
-			for (Object* pObject : m_pStaticObjects)
+			const float chunkMinX{ static_cast<float>(x * m_levelConfig.CameraMaxViewDistance) };
+			const float chunkMaxX{ static_cast<float>(chunkMinX + m_levelConfig.CameraMaxViewDistance) };
+			const float chunkMinY{ static_cast<float>(y * m_levelConfig.CameraMaxViewDistance) };
+			const float chunkMaxY{ static_cast<float>(chunkMinY + m_levelConfig.CameraMaxViewDistance) };
+
+			for (const std::shared_ptr<Object>& pObject : m_staticObjects)
 			{
-				if (dynamic_cast<Wall*>(pObject))
+				const float objectX{ pObject->GetLocation().X };
+				const float objectY{ pObject->GetLocation().Y };
+
+				if (pObject->GetClassType() == ECLASS_TYPE::WALL)
 				{
 					// if wall is in current chunk add it to it
-					if (((pObject->GetLocation().X > x * m_levelConfig.CameraMaxViewDistance &&
-						pObject->GetLocation().X < x * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance) ||
-						(pObject->GetLocation().X + m_levelConfig.TileSizeCm > x * m_levelConfig.CameraMaxViewDistance &&
-							pObject->GetLocation().X + m_levelConfig.TileSizeCm < x * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance))
+					if (((objectX > chunkMinX && objectX < chunkMaxX) ||
+						(objectX + m_levelConfig.TileSizeCm > chunkMinX && objectX + m_levelConfig.TileSizeCm < chunkMaxX))
 						&&
-						((pObject->GetLocation().Y > y * m_levelConfig.CameraMaxViewDistance &&
-							pObject->GetLocation().Y < y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance) ||
-							(pObject->GetLocation().Y + m_levelConfig.TileSizeCm > y * m_levelConfig.CameraMaxViewDistance &&
-								pObject->GetLocation().Y + m_levelConfig.TileSizeCm < y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)))
+						((objectY > chunkMinY && objectY < chunkMaxY) ||
+							(objectY + m_levelConfig.TileSizeCm > chunkMinY && objectY + m_levelConfig.TileSizeCm < chunkMaxY)))
 					{
 						m_pStaticObjectChunks[y * static_cast<int>(m_levelChunkCount.X) + x].push_back(pObject);
 					}
@@ -615,35 +585,25 @@ void ObjectManager::SplitObjectsInChunks()
 				else
 				{
 					// if object is in current chunk add it to it
-					if ((pObject->GetLocation().X >= x * m_levelConfig.CameraMaxViewDistance &&
-						pObject->GetLocation().X < x * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
+					if ((objectX >= chunkMinX &&
+						objectX < chunkMaxX)
 						&&
-						(pObject->GetLocation().Y >= y * m_levelConfig.CameraMaxViewDistance &&
-							pObject->GetLocation().Y < y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance))
+						(objectY >= chunkMinY &&
+							objectY < chunkMaxY))
 					{
 						m_pStaticObjectChunks[y * static_cast<int>(m_levelChunkCount.X) + x].push_back(pObject);
 					}
 				}
 			}
 
-			for (Object* pObject : m_pDynamicObjects)
-			{
-				// if object is in current chunk add it to it
-				if ((pObject->GetLocation().X >= x * m_levelConfig.CameraMaxViewDistance &&
-					pObject->GetLocation().X < x * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance)
-					&&
-					(pObject->GetLocation().Y >= y * m_levelConfig.CameraMaxViewDistance &&
-						pObject->GetLocation().Y < y * m_levelConfig.CameraMaxViewDistance + m_levelConfig.CameraMaxViewDistance))
-				{
-					m_pDynamicObjectChunks[y * static_cast<int>(m_levelChunkCount.X) + x].push_back(pObject);
 
-					// if current dynamic object is the player set current player chunk
-					if (dynamic_cast<Player*>(pObject))
-					{
-						m_playerChunk.X = x;
-						m_playerChunk.Y = y;
-					}
-				}
+
+			// if player is in current chunk set player chunk
+			if ((playerLocation.X >= chunkMinX && playerLocation.X < chunkMaxX)
+				&&
+				(playerLocation.Y >= chunkMinY && playerLocation.Y < chunkMaxY))
+			{
+				m_playerChunk = { static_cast<float>(x), static_cast<float>(y) };
 			}
 		}
 	}
@@ -651,13 +611,6 @@ void ObjectManager::SplitObjectsInChunks()
 
 void ObjectManager::ChangePlayerChunk(int _playerChunkX, int _playerChunkY)
 {
-	// remove player from current chunk
-	m_pDynamicObjectChunks[static_cast<int>(m_playerChunk.Y * m_levelChunkCount.X + m_playerChunk.X)].remove(m_pPlayer);
-
 	// change chunk
-	m_playerChunk.X = _playerChunkX;
-	m_playerChunk.Y = _playerChunkY;
-
-	// add player to new chunk
-	m_pDynamicObjectChunks[static_cast<int>(m_playerChunk.Y * m_levelChunkCount.X + m_playerChunk.X)].push_back(m_pPlayer);
+	m_playerChunk = { static_cast<float>(_playerChunkX), static_cast<float>(_playerChunkY) };
 }
